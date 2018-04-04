@@ -9,8 +9,7 @@ from application.exts import db
 
 @home.route('/')
 def index():
-    user = User(username='limin', password='12345')
-    # db.create_all()
-    db.session.add(user)
-    db.session.commit()
+    # user = User(username='limin', password='12345')
+    # db.session.add(user)
+    # db.session.commit()
     return render_template('home/index.html')

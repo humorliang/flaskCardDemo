@@ -15,3 +15,4 @@ class User(db.Model):
         self.username = username
         self.password = password
         print('create table user')
+

@@ -1,0 +1,61 @@
+ul{
+    padding-left:20px; 
+}
+li {
+    list-style: none;
+    font-size: 15px;
+    height: 30px;
+    line-height: 30px;
+}
+
+a:focus,
+a:hover {
+    text-decoration: none;
+}
+.row{
+    margin: 0;
+
+}
+.content{
+    width: 100%;
+    min-width: 780px;
+}
+/* 内容左边样式 */
+.content-left {
+    padding-top: 30px;
+    background: #f5f5f5;
+    border-right: 1px solid #ccc;
+    max-width: 260px;
+}
+
+.navbar {
+    margin-bottom: 0px;
+    padding-bottom: 10px;
+}
+
+.menu {
+    font-size: 17px;
+    padding: 10px 20px;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+}
+.menu-title span{
+    display: block;
+    float: right;
+}
+/* 右边样式 */
+.con-rg-title{
+    margin-top: 20px;
+    padding: 2px 5px;
+    background: #f4f4f4;
+    border-bottom: 1px solid #ccc;
+    border-radius: 4px;
+}
+.content-right .new-list li{
+    margin: 15px 0;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #ccc;
+}
+.content-right .new-list li time{
+    float: right;
+}

@@ -1,5 +1,6 @@
 # coding:utf-8
 from application.exts import db
+from datetime import datetime
 
 
 # 管理员表
@@ -68,12 +69,12 @@ class Credit(db.Model):
     consumes = db.relationship('Consume', backref='credit', lazy='dynamic')
     deals = db.relationship('Deal', backref='credit', lazy='dynamic')
 
-    def __init__(self, creditid, limit, overmoney, creditname,phone, vaildate, cdtstatus, idcard):
+    def __init__(self, creditid, limit, overmoney, creditname, phone, vaildate, cdtstatus, idcard):
         self.credit_id = creditid
         self.limit = limit
         self.overMoney = overmoney
         self.creditName = creditname
-        self.phone=phone
+        self.phone = phone
         self.vailDate = vaildate
         self.cdt_status = cdtstatus
         self.idCard = idcard
@@ -145,3 +146,18 @@ class Info(db.Model):
 
     def __repr__(self):
         return '<Info %s>' % self.name
+
+
+# 银行信息表
+class BankInfo(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
+    title = db.Column(db.String(100), nullable=False)
+    posturl = db.Column(db.String(100), nullable=False)
+    date = db.Column(db.DateTime, default=datetime.today())
+
+    def __init__(self, title, posturl):
+        self.title = title
+        self.posturl = posturl
+
+    def __repr__(self):
+        return '<BankInfo %s>' % self.title

@@ -23,7 +23,7 @@ class Debt(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
     credit_id = db.Column(db.String(30), db.ForeignKey('credit.credit_id'), nullable=True)
     debt_date = db.Column(db.DateTime, nullable=False)
-    sum_money = db.Column(db.DECIMAL(12, 1), nullable=False)
+    sum_money = db.Column(db.DECIMAL(15, 1), nullable=False)
 
     def __init__(self, credit_id, debt_date, sum_money):
         self.credit_id = credit_id
@@ -40,7 +40,7 @@ class Consume(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
     credit_id = db.Column(db.String(30), db.ForeignKey('credit.credit_id'), nullable=True)
     consume_date = db.Column(db.DateTime, nullable=False)
-    sum_money = db.Column(db.DECIMAL(12, 1), nullable=False)
+    sum_money = db.Column(db.DECIMAL(15, 1), nullable=False)
 
     def __init__(self, credit_id, consume_date, sum_money):
         self.credit_id = credit_id
@@ -59,7 +59,7 @@ class Credit(db.Model):
     limit = db.Column(db.String(20), nullable=False)
     overMoney = db.Column(db.String(20), nullable=False)
     creditName = db.Column(db.String(20), nullable=False)
-    phone = db.Column(db.Integer, db.ForeignKey('user.phone'), nullable=True)
+    phone = db.Column(db.String(110), db.ForeignKey('user.phone'), nullable=True)
     vailDate = db.Column(db.DateTime)
     cdt_status = db.Column(db.SmallInteger, nullable=False)  # 0 为冻结 1 为正常
     idCard = db.Column(db.String(24), nullable=False)
@@ -68,11 +68,12 @@ class Credit(db.Model):
     consumes = db.relationship('Consume', backref='credit', lazy='dynamic')
     deals = db.relationship('Deal', backref='credit', lazy='dynamic')
 
-    def __init__(self, creditid, limit, overmoney, creditname, vaildate, cdtstatus, idcard):
+    def __init__(self, creditid, limit, overmoney, creditname,phone, vaildate, cdtstatus, idcard):
         self.credit_id = creditid
         self.limit = limit
         self.overMoney = overmoney
         self.creditName = creditname
+        self.phone=phone
         self.vailDate = vaildate
         self.cdt_status = cdtstatus
         self.idCard = idcard
@@ -86,7 +87,7 @@ class Deal(db.Model):
     __tablename__ = 'deal'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
     credit_id = db.Column(db.String(30), db.ForeignKey('credit.credit_id'), nullable=True)
-    sum_money = db.Column(db.DECIMAL(12, 1), nullable=False)
+    sum_money = db.Column(db.DECIMAL(15, 1), nullable=False)
     deal_date = db.Column(db.DateTime, nullable=False)
     deal_type = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(100), nullable=False)
@@ -108,9 +109,9 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
     username = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(100), nullable=False)
-    phone = db.Column(db.Integer, nullable=True, unique=True)  # 外键必须在主表中唯一或者为主键
+    phone = db.Column(db.String(110), nullable=True, unique=True)  # 外键必须在主表中唯一或者为主键
     # 用户表关系
-    info = db.relationship('Info', backref='user', lazy='dynamic', uselist=False)
+    info = db.relationship('Info', backref='user', uselist=False)
 
     def __init__(self, username, password, phone):
         self.username = username
@@ -127,7 +128,7 @@ class Info(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
     name = db.Column(db.String(100), nullable=False)
     age = db.Column(db.Integer, nullable=False)
-    phone = db.Column(db.Integer, db.ForeignKey('user.phone'), nullable=True)  # 手机号唯一
+    phone = db.Column(db.String(110), db.ForeignKey('user.phone'), nullable=True)  # 手机号唯一
     sex = db.Column(db.SmallInteger, nullable=False)  # 1 为男 0 为女
     email = db.Column(db.String(20), nullable=False)
     job = db.Column(db.String(10), nullable=False)

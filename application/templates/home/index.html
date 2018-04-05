@@ -1,10 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
-<h1>这是家目录</h1>
-</body>
-</html>
+{% extends 'home/base.html' %}
+{% block style %}
+    <style>
+        .content-right .new-list li {
+            margin: 15px 0;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .content-right .new-list li time {
+            float: right;
+        }
+    </style>
+{% endblock %}
+{% block  content %}
+    <div class="con-rg-title">
+        <h2>最新消息</h2>
+    </div>
+    <ul class="new-list">
+        <li>
+            <a href="#">招商银行信用卡活动</a>
+            <time>2018/2/12</time>
+        </li>
+        <li>
+            <a href="#">信用卡利率下周上涨</a>
+            <time>2018/2/12</time>
+        </li>
+        <li>
+            <a href="#">一家银行不能有多张信用卡</a>
+            <time>2018/2/12</time>
+        </li>
+        <li>
+            <a href="#">中国银行白金卡购物特权</a>
+            <time>2018/2/12</time>
+        </li>
+    </ul>
+{% endblock %}

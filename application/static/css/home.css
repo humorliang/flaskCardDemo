@@ -51,11 +51,3 @@ a:hover {
     border-bottom: 1px solid #ccc;
     border-radius: 4px;
 }
-.content-right .new-list li{
-    margin: 15px 0;
-    padding-bottom: 5px;
-    border-bottom: 1px solid #ccc;
-}
-.content-right .new-list li time{
-    float: right;
-}

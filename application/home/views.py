@@ -7,6 +7,7 @@ from application.models import *
 from application.exts import db
 
 
+# 登陆视图
 @home.route('/')
 def login():
     # # 1.用户表
@@ -30,4 +31,61 @@ def login():
     #
     # db.session.add_all([deal, debt, consume])
     # db.session.commit()
+    return render_template('home/login.html')
+
+
+# 千万不要使用蓝图名定义视图函数，否则蓝图会被覆盖
+# 用户主页
+@home.route('/main')
+def main():
     return render_template('home/index.html')
+
+
+# 用户信息视图
+@home.route('/userInfo')
+def user_info():
+    return render_template('home/user-info.html')
+
+
+# 修改信息视图
+@home.route('/editInfo')
+def edit_info():
+    return render_template('home/edit-info.html')
+
+
+# 修改密码
+@home.route('/editPwd')
+def edit_pwd():
+    return render_template('home/edit-pwd.html')
+
+
+# 我的信用卡
+@home.route('/myCredit')
+def my_credit():
+    return render_template('home/my-credit.html')
+
+
+# 信用卡申请
+@home.route('/applyCredit')
+def apply_credit():
+
+    return render_template('home/apply-credit.html')
+
+
+# 账单信息
+@home.route('/dealInfo')
+def deal_info():
+    return render_template('home/deal-info.html')
+
+
+# 欠款信息
+@home.route('/debtInfo')
+def debt_info():
+    return render_template('home/debt-info.html')
+
+
+# 消费信息
+@home.route('/consumeInfo')
+def consume_info():
+    return render_template('home/consume-info.html')
+

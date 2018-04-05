@@ -1,0 +1,91 @@
+{% extends 'home/base.html' %}
+{% block style %}
+    <style>
+        .content-rg-con {
+            padding: 30px 0;
+            margin: 80px auto 0;
+            width: 500px;
+            background: #eee;
+            border-radius: 10px;
+        }
+
+        .form-row {
+            margin: 10px;
+        }
+
+        .form-row > input:nth-child(1),
+        .form-row > input:nth-child(2) {
+            height: 34px;
+            font-size: 14px;
+            line-height: 1.42857;
+            color: rgb(85, 85, 85);
+            background-color: rgb(255, 255, 255);
+            background-image: none;
+            border-radius: 4px;
+            box-shadow: rgba(0, 0, 0, 0.075) 0px 1px 1px inset;
+            padding: 6px 10px;
+            border-width: 1px;
+            border-style: solid;
+            border-color: rgb(204, 204, 204);
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .text-right a {
+            display: inline-block;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+
+        .margin-top {
+            margin-top: 6px;
+            font-size: 16px;
+        }
+
+        .btn-width-margin {
+            margin-top: 30px;
+            width: 100px;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="content-rg-con" style="width:600px">
+        <h1 class="text-center text-primary">信用卡申请</h1>
+        <form action="" method="post">
+            <div class="form-row row">
+                <div class="col-xs-2 margin-top col-xs-offset-2 text-right">申请人</div>
+                <input class="col-xs-6" type="text" name="username" placeholder="申请人">
+            </div>
+            <div class="form-row row">
+                <div class="col-xs-2 margin-top col-xs-offset-2 text-right">申请额度</div>
+                <input class="col-xs-6" type="number" name="moneylimit" placeholder="申请额度">
+            </div>
+            <div class="form-row row">
+                <div class="col-xs-2 margin-top col-xs-offset-2 text-right" style="padding-left:0;">身份证号码</div>
+                <input class="col-xs-6" type="text" name="IDCard" placeholder="身份证号码">
+            </div>
+            <div class="form-row row">
+                <div class="col-xs-2 margin-top col-xs-offset-2 text-right">手机号</div>
+                <input class="col-xs-6" type="tel" name="phonenumber" placeholder="手机号">
+            </div>
+            <div class="form-row row">
+                <div class="col-xs-2 margin-top col-xs-offset-2 text-right">邮箱</div>
+                <input class="col-xs-6" type="email" name="email" placeholder="输入邮箱">
+            </div>
+            <div class="form-row row">
+                <div class="col-xs-2 margin-top col-xs-offset-2 text-right">家庭住址</div>
+                <input class="col-xs-6" type="text" name="address" placeholder="家庭住址">
+            </div>
+            <div class="form-row row">
+                <div class="col-xs-2 col-xs-offset-3">
+                    <input type="submit" class="btn btn-primary btn-width-margin" value="提交">
+                </div>
+                <div class="col-xs-5 col-xs-offset-2">
+                    <input type="reset" class="btn btn-primary btn-width-margin" value="重置">
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

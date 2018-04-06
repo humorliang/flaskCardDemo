@@ -1,6 +1,6 @@
 from .__init__ import admin
 from flask import render_template, redirect, request, flash, session, url_for
-from .forms import LoginForm
+from .forms import LoginForm, AddNewsForm
 from application.models import *
 from functools import wraps
 
@@ -40,11 +40,18 @@ def news_list():
 
 
 # 添加银行消息
-@admin.route('/addNews')
+@admin.route('/addNews', methods=['GET', 'POST'])
 @admin_login_decorate
 def add_news():
-
-    return render_template('admin/add-news.html')
+    form = AddNewsForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            data = form.data
+            bankinfo = BankInfo(title=data['title'], posturl=data['url'], date=data['newsDate'])
+            db.session.add(bankinfo)
+            db.session.commit()
+            return redirect(url_for('admin.news_list'))
+    return render_template('admin/add-news.html', form=form)
 
 
 # 删除银行消息

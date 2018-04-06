@@ -165,9 +165,10 @@ class BankInfo(db.Model):
     posturl = db.Column(db.String(100), nullable=False)
     date = db.Column(db.DateTime, default=datetime.today())
 
-    def __init__(self, title, posturl):
+    def __init__(self, title, posturl, date):
         self.title = title
         self.posturl = posturl
+        self.date = date
 
     def __repr__(self):
         return '<BankInfo %s>' % self.title

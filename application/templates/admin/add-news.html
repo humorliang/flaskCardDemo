@@ -59,20 +59,37 @@
         <form action="" method="post">
             <div class="form-row row">
                 <div class="col-xs-2 margin-top col-xs-offset-2 text-right">标题</div>
-                <input class="col-xs-6" type="text" name="newstitle" placeholder="输入文章标题">
+                {#                <input class="col-xs-6" type="text" name="newstitle" placeholder="输入文章标题">#}
+                {{ form.title }}
             </div>
+
+            {% for err in form.title.errors %}
+                <div class="form-row row text-danger text-center">{{ err }}</div>
+            {% endfor %}
+
             <div class="form-row row">
                 <div class="col-xs-2 margin-top col-xs-offset-2 text-right">链接</div>
-                <input class="col-xs-6" type="text" name="newsurl" placeholder="输入链接">
+                {#                <input class="col-xs-6" type="text" name="newsurl" placeholder="输入链接">#}
+                {{ form.url }}
             </div>
+            {% for err in form.url.errors %}
+                <div class="form-row row text-danger text-center">{{ err }}</div>
+            {% endfor %}
 
             <div class="form-row row">
                 <div class="col-xs-2 margin-top col-xs-offset-2 text-right">时间</div>
-                <input class="col-xs-6" type="date" name="arearagetime" placeholder="请输入时间">
+                {#                <input class="col-xs-6" type="date" name="arearagetime" placeholder="请输入时间">#}
+                {{ form.newsDate }}
             </div>
+            {% for err in form.newsDate.errors %}
+                <div class="form-row row text-danger text-center">{{ err }}</div>
+            {% endfor %}
+
             <div class="form-row row">
                 <div class="col-xs-2 col-xs-offset-3">
-                    <input type="submit" class="btn btn-primary btn-width-margin" value="添加">
+{#                    <input type="submit" class="btn btn-primary btn-width-margin" value="添加">#}
+                    {{ form.csrf_token }}
+                    {{ form.submit }}
                 </div>
                 <div class="col-xs-5 col-xs-offset-2">
                     <input type="reset" class="btn btn-primary btn-width-margin" value="重置">

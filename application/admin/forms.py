@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, BooleanField, PasswordField, SubmitField  # 添加字段
-from wtforms.validators import DataRequired, EqualTo, ValidationError  # 导入验证器
+from wtforms import StringField, DateField, PasswordField, SubmitField  # 添加字段
+from wtforms.validators import DataRequired, URL, ValidationError  # 导入验证器
 from application.models import Admin
 
 
@@ -43,6 +43,40 @@ class LoginForm(FlaskForm):
 
 # 银行信息表单
 class AddNewsForm(FlaskForm):
-    title=StringField(
-        
+    title = StringField(
+        label='文章标题',
+        validators=[
+            DataRequired('请输入文章标题')
+        ],
+        render_kw={
+            'class': "col-xs-6",
+            'placeholder': "输入文章标题"
+        }
+    )
+    url = StringField(
+        label='文章链接',
+        validators=[
+            URL('请输入正确地址')
+        ],
+        render_kw={
+            'class': "col-xs-6",
+            'placeholder': "输入文章链接"
+        }
+    )
+    newsDate = DateField(
+        label='输入时间',
+        validators=[
+            DataRequired('请输入时间')
+        ],
+        render_kw={
+            'class': "col-xs-6",
+            'placeholder': "格式%Y-%m-%d'"
+        }
+    )
+    submit = SubmitField(
+        label='添加',
+        description='添加',
+        render_kw={
+            'class': "btn btn-primary btn-width-margin"
+        }
     )

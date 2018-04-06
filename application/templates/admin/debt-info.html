@@ -1,31 +1,28 @@
-{% extends 'home/user-base.html' %}
-{% block title %}
-    账单信息
-{% endblock %}
+{% extends 'admin/admin-base.html' %}
 {% block content %}
     <div class="con-rg-title">
-        <h3>交易明细</h3>
+        <h3>还款信息</h3>
     </div>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
             <tr>
                 <th>卡号</th>
-                <th>金额</th>
-                <th>类型</th>
-                <th>余额</th>
-                <th>时间</th>
-                <th>备注</th>
+                <th>持卡人</th>
+                <th>还款金额</th>
+                <th>还款时间</th>
+                <th>操作</th>
             </tr>
             </thead>
             <tbody>
             <tr>
                 <td>6288256868852555685</td>
-                <td>100</td>
-                <td>转账</td>
+                <td>郑阿三</td>
                 <td>1000</td>
                 <td>2018-2-12</td>
-                <td>王五支付</td>
+                <td>
+                    <a href="{{ url_for('admin.freeze_user') }}" class="btn btn-primary btn-xs">冻结</a>
+                </td>
             </tr>
             </tbody>
         </table>

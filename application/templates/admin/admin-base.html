@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/home.css') }}">
+    <title>{% block title %}{% endblock %}</title>
+    {% block style %}{% endblock %}
+</head>
+
+<body>
+<div class="content">
+    <!-- 头部 -->
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header col-xs-9">
+                <a class="navbar-brand" href="#">信用卡管理系统后台</a>
+            </div>
+            <div class="col-xs-3">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="{{ url_for('admin.login_out') }}">退出</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </nav>
+    <!-- 内容 -->
+    <div class="row">
+        <div class="col-xs-3 content-left">
+            <div class="menu">
+                <div class="menu-title">
+                    系统设置
+                </div>
+                <ul>
+                    <li>
+                        <a href="{{ url_for('admin.news_list') }}">银行新信息</a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('admin.admin_info') }}">管理员账户</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="menu">
+                <div class="menu-title">
+                    用户管理
+                </div>
+                <ul>
+                    <li>
+                        <a href="{{ url_for('admin.user_info') }}">账户信息</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="menu">
+                <div class="menu-title">
+                    <div>
+                        信用卡管理
+                    </div>
+                </div>
+                <ul>
+                    <li>
+                        <a href="{{ url_for('admin.apply_list') }}">新的申请</a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('admin.add_credit') }}">添加信用卡</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="menu">
+                <div class="menu-title">
+                    <div>
+                        账单管理
+                    </div>
+                    <ul>
+                        <li>
+                            <a href="{{ url_for('admin.deal_info') }}">账单信息</a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('admin.add_deal') }}">添加账单</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="menu">
+                <div class="menu-title">
+                    <div>
+                        还款管理
+                    </div>
+                </div>
+                <ul>
+                    <li>
+                        <a href="{{ url_for('admin.debt_info') }}">还款信息</a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('admin.add_debt') }}">添加还款</a>
+                    </li>
+                </ul>
+
+            </div>
+            <div class="menu">
+                <div class="menu-title">
+                    <div>
+                        消费管理
+                    </div>
+                </div>
+                <ul>
+                    <li>
+                        <a href="{{ url_for('admin.consume_info') }}">消费信息</a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('admin.add_consume') }}">添加消费</a>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+        <div class="col-xs-9 content-right">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <!--底部-->
+    <div class="footer">
+        <p class="text-center">CreditCMS&nbsp;V1.0&nbsp;&nbsp; @copy 2018 by lianglong design</p>
+    </div>
+</div>
+
+</body>
+
+</html>

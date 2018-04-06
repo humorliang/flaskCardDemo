@@ -1,29 +1,33 @@
-{% extends 'home/user-base.html' %}
+{% extends 'admin/admin-base.html' %}
 {% block title %}
-    我的信用卡
+    账户信息
 {% endblock %}
 {% block content %}
     <div class="con-rg-title">
-        <h3>信用卡信息</h3>
+        <h3>状态信息</h3>
     </div>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
             <tr>
                 <th>卡号</th>
-                <th>有效期</th>
                 <th>持卡人</th>
                 <th>余额</th>
+                <th>欠款</th>
                 <th>状态</th>
+                <th>操作</th>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td>6288256868852555685</td>
-                <td>2018-2-25</td>
+                <td>6288588869993666582</td>
                 <td>张三</td>
-                <td>100000</td>
+                <td>1000</td>
+                <td>2000</td>
                 <td>正常</td>
+                <td>
+                    <a href="{{ url_for('admin.freeze_user') }}" class="btn btn-primary btn-xs">冻结</a>
+                </td>
             </tr>
             </tbody>
         </table>

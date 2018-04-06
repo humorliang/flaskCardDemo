@@ -1,15 +1,32 @@
 # coding:utf-8
 # 导入home蓝图
 # 同级目录必须使用模块名引入
+
 from .__init__ import home
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, session, flash, redirect, url_for, request
 from application.models import *
 from application.exts import db
-from .forms import RegisterForm
+from .forms import RegisterForm, LoginForm
+from functools import wraps
+
+
+
+# d定义登陆装饰器
+def user_login_decorate(fun):
+    @wraps(fun)
+    def check_session(*args, **kwargs):
+        if 'user' not in session:
+            return redirect(url_for('home.login', next=request.url))
+        return fun(*args, **kwargs)
+
+    return check_session
+
+
+# 定义一个
 
 
 # 登陆视图
-@home.route('/')
+@home.route('/login', methods=['GET', "POST"])
 def login():
     # # 1.用户表
     # user = User(username='老王', password='123456', phone='18894259425')
@@ -32,7 +49,29 @@ def login():
     #
     # db.session.add_all([deal, debt, consume])
     # db.session.commit()
-    return render_template('home/login.html')
+    form = LoginForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            data = form.data
+            user = User.query.filter_by(username=data['username']).first()
+            if not user.check_pwd(data['password']):
+                flash('密码错误')
+                return redirect(url_for('home.login'))
+            session['user'] = data['username']
+            # # 设置session过期时间
+            # print(data['remember']) # 返回值为True
+            if data['remember']:
+                session.permanent = True  # 设置浏览器关闭还保存session
+            return redirect(url_for('home.main'))
+    return render_template('home/login.html', form=form)
+
+
+# 退出登陆
+@home.route('/loginOut')
+@user_login_decorate
+def login_out():
+    session.pop('user', None)
+    return redirect(url_for('home.login'))
 
 
 # 注册视图
@@ -49,56 +88,64 @@ def register():
     return render_template('home/register.html', form=form)
 
 
-# 千万不要使用蓝图名定义视图函数，否则蓝图会被覆盖
 # 用户主页
-@home.route('/main')
+@home.route('/')
+@user_login_decorate
 def main():
     return render_template('home/index.html')
 
 
 # 用户信息视图
 @home.route('/userInfo')
+@user_login_decorate
 def user_info():
     return render_template('home/user-info.html')
 
 
 # 修改信息视图
 @home.route('/editInfo')
+@user_login_decorate
 def edit_info():
     return render_template('home/edit-info.html')
 
 
 # 修改密码
 @home.route('/editPwd')
+@user_login_decorate
 def edit_pwd():
     return render_template('home/edit-pwd.html')
 
 
 # 我的信用卡
 @home.route('/myCredit')
+@user_login_decorate
 def my_credit():
     return render_template('home/my-credit.html')
 
 
 # 信用卡申请
 @home.route('/applyCredit')
+@user_login_decorate
 def apply_credit():
     return render_template('home/apply-credit.html')
 
 
 # 账单信息
 @home.route('/dealInfo')
+@user_login_decorate
 def deal_info():
     return render_template('home/deal-info.html')
 
 
 # 欠款信息
 @home.route('/debtInfo')
+@user_login_decorate
 def debt_info():
     return render_template('home/debt-info.html')
 
 
 # 消费信息
 @home.route('/consumeInfo')
+@user_login_decorate
 def consume_info():
     return render_template('home/consume-info.html')

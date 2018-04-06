@@ -11,24 +11,38 @@
 </head>
 
 <body>
-    <div class="content">
-        <h1 class="text-center">管理员登陆</h1>
-        <form action="" method="post">
-            <div class="form-row row">
-                <div class="col-xs-2 margin-top col-xs-offset-2 text-right">用户名</div>
-                <input class="col-xs-6" type="text" name="username" placeholder="用户名">
+<div class="content">
+    <h1 class="text-center">管理员登陆</h1>
+    <form action="" method="post">
+        <div class="form-row row">
+            <div class="col-xs-2 margin-top col-xs-offset-2 text-right">用户名</div>
+            {#                <input class="col-xs-6" type="text" name="username" placeholder="用户名">#}
+            {{ form.username }}
+        </div>
+        {% for err in form.username.errors %}
+            <div class="form-row row text-danger text-center">{{ err }}</div>
+        {% endfor %}
+
+        <div class="form-row row">
+            <div class="col-xs-2 margin-top col-xs-offset-2 text-right">密码</div>
+            {#                <input class="col-xs-6" type="password" name="password" placeholder="输入密码">#}
+            {{ form.password }}
+        </div>
+        {% for err in form.password.errors %}
+            <div class="form-row row text-danger text-center">{{ err }}</div>
+        {% endfor %}
+        {% for msg in get_flashed_messages() %}
+            <div class="form-row row text-danger text-center">{{ msg }}</div>
+        {% endfor %}
+        <div class="form-row row">
+            <div class="col-xs-offset-5">
+                {#                    <input type="submit" class="btn btn-primary" value="登陆" style="width:150px;" >#}
+                {{ form.hidden_tag() }}
+                {{ form.submit }}
             </div>
-            <div class="form-row row">
-                <div class="col-xs-2 margin-top col-xs-offset-2 text-right">密码</div>
-                <input class="col-xs-6" type="password" name="password" placeholder="输入密码">
-            </div>
-            <div class="form-row row">
-                <div class="col-xs-offset-5">
-                    <input type="submit" class="btn btn-primary" value="登陆" style="width:150px;" >
-                </div>
-            </div>
-        </form>
-    </div>
+        </div>
+    </form>
+</div>
 </body>
 
 </html>

@@ -14,6 +14,11 @@ class Admin(db.Model):
         self.username = username
         self.password = password
 
+    def check_pwd(self, pwd):
+        if pwd == self.password:
+            return True
+        return False
+
     def __repr__(self):
         return '<User %r>' % self.username
 
@@ -121,6 +126,11 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %s>' % self.username
+
+    def check_pwd(self, pwd):
+        if pwd == self.password:
+            return True
+        return False
 
 
 # 用户信息表

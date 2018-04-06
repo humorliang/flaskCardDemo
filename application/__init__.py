@@ -10,6 +10,8 @@ app = Flask(__name__)
 app.config.from_object(config)
 db.init_app(app)
 
+
+
 # 在app中注册蓝图
 app.register_blueprint(home_blueprint)
 app.register_blueprint(admin_blueprint, url_prefix='/admin')

@@ -2,9 +2,10 @@
 # 导入home蓝图
 # 同级目录必须使用模块名引入
 from .__init__ import home
-from flask import render_template
+from flask import render_template, flash, redirect, url_for, request
 from application.models import *
 from application.exts import db
+from .forms import RegisterForm
 
 
 # 登陆视图
@@ -32,6 +33,20 @@ def login():
     # db.session.add_all([deal, debt, consume])
     # db.session.commit()
     return render_template('home/login.html')
+
+
+# 注册视图
+@home.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegisterForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            date = form.data
+            user = User(username=date['username'], password=date['password'], phone=date['phone'])
+            db.session.add(user)
+            db.session.commit()
+            return redirect(url_for('home.login'))
+    return render_template('home/register.html', form=form)
 
 
 # 千万不要使用蓝图名定义视图函数，否则蓝图会被覆盖
@@ -68,7 +83,6 @@ def my_credit():
 # 信用卡申请
 @home.route('/applyCredit')
 def apply_credit():
-
     return render_template('home/apply-credit.html')
 
 
@@ -88,4 +102,3 @@ def debt_info():
 @home.route('/consumeInfo')
 def consume_info():
     return render_template('home/consume-info.html')
-

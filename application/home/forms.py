@@ -118,3 +118,5 @@ class LoginForm(FlaskForm):
         user = User.query.filter_by(username=username).count()
         if user == 0:
             raise ValidationError('用户名不存在')
+
+# 修改密码

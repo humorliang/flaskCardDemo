@@ -1,6 +1,5 @@
 # coding:utf-8
 from application.exts import db
-from datetime import datetime
 
 
 # 管理员表
@@ -28,7 +27,7 @@ class Debt(db.Model):
     __tablename__ = 'debt'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
     credit_id = db.Column(db.String(30), db.ForeignKey('credit.credit_id'), nullable=True)
-    debt_date = db.Column(db.DateTime, nullable=False)
+    debt_date = db.Column(db.Date, nullable=False)
     sum_money = db.Column(db.DECIMAL(15, 1), nullable=False)
 
     def __init__(self, credit_id, debt_date, sum_money):
@@ -45,7 +44,7 @@ class Consume(db.Model):
     __tablename__ = 'consume'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
     credit_id = db.Column(db.String(30), db.ForeignKey('credit.credit_id'), nullable=True)
-    consume_date = db.Column(db.DateTime, nullable=False)
+    consume_date = db.Column(db.Date, nullable=False)
     sum_money = db.Column(db.DECIMAL(15, 1), nullable=False)
 
     def __init__(self, credit_id, consume_date, sum_money):
@@ -66,7 +65,7 @@ class Credit(db.Model):
     overMoney = db.Column(db.String(20), nullable=False)
     creditName = db.Column(db.String(20), nullable=False)
     phone = db.Column(db.String(110), db.ForeignKey('user.phone'), nullable=True)
-    vailDate = db.Column(db.DateTime)
+    vailDate = db.Column(db.Date)
     cdt_status = db.Column(db.SmallInteger, nullable=False)  # 0 为冻结 1 为正常
     idCard = db.Column(db.String(24), nullable=False)
     # 还款表关系
@@ -94,7 +93,7 @@ class Deal(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
     credit_id = db.Column(db.String(30), db.ForeignKey('credit.credit_id'), nullable=True)
     sum_money = db.Column(db.DECIMAL(15, 1), nullable=False)
-    deal_date = db.Column(db.DateTime, nullable=False)
+    deal_date = db.Column(db.Date, nullable=False)
     deal_type = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(100), nullable=False)
 
@@ -118,6 +117,7 @@ class User(db.Model):
     phone = db.Column(db.String(110), nullable=True, unique=True)  # 外键必须在主表中唯一或者为主键
     # 用户表关系
     info = db.relationship('Info', backref='user', uselist=False)
+    applycard = db.relationship('ApplyCard', backref='user')
 
     def __init__(self, username, password, phone):
         self.username = username
@@ -163,12 +163,32 @@ class BankInfo(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
     title = db.Column(db.String(100), nullable=False)
     posturl = db.Column(db.String(100), nullable=False)
-    date = db.Column(db.DateTime, default=datetime.today())
+    date = db.Column(db.Date)
 
     def __init__(self, title, posturl, date):
         self.title = title
         self.posturl = posturl
         self.date = date
 
+
+# 申请表
+class ApplyCard(db.Model):
+    __tablename__ = 'applycard'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
+    name = db.Column(db.String(100), nullable=False)
+    limit = db.Column(db.String(100), nullable=False)
+    idcard = db.Column(db.String(24), nullable=False)
+    phone = db.Column(db.String(110), db.ForeignKey('user.phone'), unique=True)
+    email = db.Column(db.String(24), nullable=False)
+    address = db.Column(db.String(24), nullable=False)
+
+    def __init__(self, name, limit, idcard, phone, email, address):
+        self.name = name
+        self.limit = limit
+        self.idcard = idcard
+        self.phone = phone
+        self.email = email
+        self.address = address
+
     def __repr__(self):
-        return '<BankInfo %s>' % self.title
+        return '<ApplyCard %s>' % self.name

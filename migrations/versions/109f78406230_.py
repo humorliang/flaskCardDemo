@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 6950cab621bc
+Revision ID: 109f78406230
 Revises: 
-Create Date: 2018-04-05 12:19:24.433390
+Create Date: 2018-04-07 16:45:15.592177
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '6950cab621bc'
+revision = '109f78406230'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -22,6 +22,13 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(length=50), nullable=False),
     sa.Column('password', sa.String(length=100), nullable=False),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('bank_info',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('title', sa.String(length=100), nullable=False),
+    sa.Column('posturl', sa.String(length=100), nullable=False),
+    sa.Column('date', sa.Date(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('user',
@@ -39,7 +46,7 @@ def upgrade():
     sa.Column('overMoney', sa.String(length=20), nullable=False),
     sa.Column('creditName', sa.String(length=20), nullable=False),
     sa.Column('phone', sa.String(length=110), nullable=True),
-    sa.Column('vailDate', sa.DateTime(), nullable=True),
+    sa.Column('vailDate', sa.Date(), nullable=True),
     sa.Column('cdt_status', sa.SmallInteger(), nullable=False),
     sa.Column('idCard', sa.String(length=24), nullable=False),
     sa.ForeignKeyConstraint(['phone'], ['user.phone'], ),
@@ -62,7 +69,7 @@ def upgrade():
     op.create_table('consume',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('credit_id', sa.String(length=30), nullable=True),
-    sa.Column('consume_date', sa.DateTime(), nullable=False),
+    sa.Column('consume_date', sa.Date(), nullable=False),
     sa.Column('sum_money', sa.DECIMAL(precision=15, scale=1), nullable=False),
     sa.ForeignKeyConstraint(['credit_id'], ['credit.credit_id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -71,7 +78,7 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('credit_id', sa.String(length=30), nullable=True),
     sa.Column('sum_money', sa.DECIMAL(precision=15, scale=1), nullable=False),
-    sa.Column('deal_date', sa.DateTime(), nullable=False),
+    sa.Column('deal_date', sa.Date(), nullable=False),
     sa.Column('deal_type', sa.String(length=100), nullable=False),
     sa.Column('description', sa.String(length=100), nullable=False),
     sa.ForeignKeyConstraint(['credit_id'], ['credit.credit_id'], ),
@@ -80,7 +87,7 @@ def upgrade():
     op.create_table('debt',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('credit_id', sa.String(length=30), nullable=True),
-    sa.Column('debt_date', sa.DateTime(), nullable=False),
+    sa.Column('debt_date', sa.Date(), nullable=False),
     sa.Column('sum_money', sa.DECIMAL(precision=15, scale=1), nullable=False),
     sa.ForeignKeyConstraint(['credit_id'], ['credit.credit_id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -96,5 +103,6 @@ def downgrade():
     op.drop_table('info')
     op.drop_table('credit')
     op.drop_table('user')
+    op.drop_table('bank_info')
     op.drop_table('admin')
     # ### end Alembic commands ###

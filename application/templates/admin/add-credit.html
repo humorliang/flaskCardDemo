@@ -57,35 +57,65 @@
         <form action="" method="post">
             <div class="form-row row">
                 <div class="col-xs-2 margin-top col-xs-offset-2 text-right">持卡人</div>
-                <input class="col-xs-6" type="text" name="username" placeholder="申请人">
+                {#                <input class="col-xs-6" type="text" name="username" placeholder="申请人">#}
+                {{ form.name }}
             </div>
+            {% for err in form.name.errors %}
+                <div class="form-row row text-danger text-center">{{ err }}</div>
+            {% endfor %}
             <div class="form-row row">
                 <div class="col-xs-2 margin-top col-xs-offset-2 text-right" style="padding-left:0;">卡号</div>
-                <input class="col-xs-6" type="text" name="IDCreditCard" placeholder="请输入卡号">
+                {#                <input class="col-xs-6" type="text" name="IDCreditCard" placeholder="请输入卡号">#}
+                {{ form.creditId }}
             </div>
+            {% for err in form.creditId.errors %}
+                <div class="form-row row text-danger text-center">{{ err }}</div>
+            {% endfor %}
             <div class="form-row row">
                 <div class="col-xs-2 margin-top col-xs-offset-2 text-right">额度</div>
-                <input class="col-xs-6" type="number" name="moneylimit" placeholder="额度">
+                {#                <input class="col-xs-6" type="number" name="moneylimit" placeholder="额度">#}
+                {{ form.limit }}
             </div>
+            {% for err in form.limit.errors %}
+                <div class="form-row row text-danger text-center">{{ err }}</div>
+            {% endfor %}
             <div class="form-row row">
                 <div class="col-xs-2 margin-top col-xs-offset-2 text-right" style="padding-left:0;">身份证号码</div>
-                <input class="col-xs-6" type="text" name="IDCard" placeholder="身份证号码">
+                {#                <input class="col-xs-6" type="text" name="IDCard" placeholder="身份证号码">#}
+                {{ form.idCard }}
             </div>
+            {% for err in form.idCard.errors %}
+                <div class="form-row row text-danger text-center">{{ err }}</div>
+            {% endfor %}
             <div class="form-row row">
                 <div class="col-xs-2 margin-top col-xs-offset-2 text-right">手机号</div>
-                <input class="col-xs-6" type="tel" name="phonenumber" placeholder="手机号">
+                {#                <input class="col-xs-6" type="tel" name="phonenumber" placeholder="手机号">#}
+                {{ form.phone }}
             </div>
+            {% for err in form.phone.errors %}
+                <div class="form-row row text-danger text-center">{{ err }}</div>
+            {% endfor %}
             <div class="form-row row">
                 <div class="col-xs-2 margin-top col-xs-offset-2 text-right">邮箱</div>
-                <input class="col-xs-6" type="email" name="email" placeholder="输入邮箱">
+                {#                <input class="col-xs-6" type="email" name="email" placeholder="输入邮箱">#}
+                {{ form.email }}
             </div>
+            {% for err in form.email.errors %}
+                <div class="form-row row text-danger text-center">{{ err }}</div>
+            {% endfor %}
             <div class="form-row row">
                 <div class="col-xs-2 margin-top col-xs-offset-2 text-right">有效期</div>
-                <input class="col-xs-6" type="date" name="vaildDate" placeholder="有效期">
+                {#                <input class="col-xs-6" type="date" name="vaildDate" placeholder="有效期">#}
+                {{ form.vailDate }}
             </div>
+            {% for err in form.vailDate.errors %}
+                <div class="form-row row text-danger text-center">{{ err }}</div>
+            {% endfor %}
             <div class="form-row row">
                 <div class="col-xs-2 col-xs-offset-3">
-                    <input type="submit" class="btn btn-primary btn-width-margin" value="添加">
+                    {#                    <input type="submit" class="btn btn-primary btn-width-margin" value="添加">#}
+                    {{ form.hidden_tag() }}
+                    {{ form.submit }}
                 </div>
                 <div class="col-xs-5 col-xs-offset-2">
                     <input type="reset" class="btn btn-primary btn-width-margin" value="重置">

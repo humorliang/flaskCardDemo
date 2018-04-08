@@ -17,8 +17,8 @@
             </thead>
             <tbody>
             <tr>
-                <td>user</td>
-                <td>123456</td>
+                <td>{{ admin_info.username }}</td>
+                <td>{{ admin_info.password }}</td>
                 <td><a href="{{ url_for('admin.change_pwd') }}" class="btn btn-primary btn-sm">修改密码</a></td>
             </tr>
             </tbody>

@@ -59,19 +59,33 @@
         <form action="" method="post">
             <div class="form-row row">
                 <div class="col-xs-2 margin-top col-xs-offset-2 text-right" style="padding-left:0px;">信用卡卡号</div>
-                <input class="col-xs-6" type="number" name="CriditID " placeholder="输入卡号">
+                {#                <input class="col-xs-6" type="number" name="CriditID " placeholder="输入卡号">#}
+                {{ form.creditId }}
             </div>
+            {% for err in form.creditId.errors %}
+                <div class="form-row row text-danger text-center">{{ err }}</div>
+            {% endfor %}
             <div class="form-row row">
                 <div class="col-xs-2 margin-top col-xs-offset-2 text-right">还款金额</div>
-                <input class="col-xs-6" type="number" name="arearagemoney" placeholder="还款金额">
+                {#                <input class="col-xs-6" type="number" name="arearagemoney" placeholder="还款金额">#}
+                {{ form.money }}
             </div>
+            {% for err in form.money.errors %}
+                <div class="form-row row text-danger text-center">{{ err }}</div>
+            {% endfor %}
             <div class="form-row row">
                 <div class="col-xs-2 margin-top col-xs-offset-2 text-right">还款时间</div>
-                <input class="col-xs-6" type="date" name="arearagetime" placeholder="还款时间">
+                {#                <input class="col-xs-6" type="date" name="arearagetime" placeholder="还款时间">#}
+                {{ form.date }}
             </div>
+            {% for err in form.date.errors %}
+                <div class="form-row row text-danger text-center">{{ err }}</div>
+            {% endfor %}
             <div class="form-row row">
                 <div class="col-xs-2 col-xs-offset-3">
-                    <input type="submit" class="btn btn-primary btn-width-margin" value="提交">
+                    {#                    <input type="submit" class="btn btn-primary btn-width-margin" value="提交">#}
+                    {{ form.hidden_tag() }}
+                    {{ form.submit }}
                 </div>
                 <div class="col-xs-5 col-xs-offset-2">
                     <input type="reset" class="btn btn-primary btn-width-margin" value="重置">

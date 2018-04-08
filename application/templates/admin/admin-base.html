@@ -12,7 +12,7 @@
 </head>
 
 <body>
-<div class="content">
+<div class="content-main">
     <!-- 头部 -->
     <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -52,7 +52,7 @@
                 </div>
                 <ul>
                     <li>
-                        <a href="{{ url_for('admin.user_info') }}">账户信息</a>
+                        <a href="{{ url_for('admin.user_info',page=1) }}">账户信息</a>
                     </li>
                 </ul>
             </div>
@@ -64,7 +64,7 @@
                 </div>
                 <ul>
                     <li>
-                        <a href="{{ url_for('admin.apply_list') }}">新的申请</a>
+                        <a href="{{ url_for('admin.apply_list',page=1) }}">新的申请</a>
                     </li>
                     <li>
                         <a href="{{ url_for('admin.add_credit') }}">添加信用卡</a>
@@ -94,7 +94,7 @@
                 </div>
                 <ul>
                     <li>
-                        <a href="{{ url_for('admin.debt_info') }}">还款信息</a>
+                        <a href="{{ url_for('admin.debt_info',page=1) }}">还款信息</a>
                     </li>
                     <li>
                         <a href="{{ url_for('admin.add_debt') }}">添加还款</a>

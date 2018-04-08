@@ -1,6 +1,6 @@
 from .__init__ import admin
 from flask import render_template, redirect, request, flash, session, url_for
-from .forms import LoginForm, AddNewsForm
+from .forms import LoginForm, AddNewsForm, EditPwdForm, DebtForm, AddCreditForm
 from application.models import *
 from functools import wraps
 
@@ -28,7 +28,7 @@ def index():
                 flash('密码错误')
                 return redirect(url_for('admin.index'))
             session['admin'] = data['username']
-            return redirect(url_for('admin.news_list'))
+            return redirect(url_for('admin.news_list', page=1))
     return render_template('admin/login.html', form=form)
 
 
@@ -68,43 +68,89 @@ def del_news(id=None):
     news = BankInfo.query.filter_by(id=id).first_or_404()
     db.session.delete(news)
     db.session.commit()
-    return redirect(url_for('admin.news_list', page=1 ))
+    return redirect(url_for('admin.news_list', page=1))
 
 
 # 管理员信息
 @admin.route('/adminInfo')
 def admin_info():
-    return render_template('admin/admin-info.html')
+    # 直接答应session['admin']会报错
+    # print(session.get('admin'))
+    admin_u = session.get('admin')
+    admin_info = Admin.query.filter_by(username=admin_u).first()
+    return render_template('admin/admin-info.html', admin_info=admin_info)
 
 
 # 修改密码
-@admin.route('/changePwd')
+@admin.route('/changePwd', methods=['GET', 'POST'])
 def change_pwd():
-    return render_template('admin/change-pwd.html')
+    form = EditPwdForm()
+    data = form.data
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            user = session.get('admin')
+            # 1.更改数据的方法
+            # admin_info = Admin.query.filter_by(username=user).first_or_404()
+            # print(admin_info.password)# 只有数据模型返回过来才能使用此用法
+            # admin_info.password = data['new_pwd']
+            # ----------------------------------------------
+            # 2.更改数据的方法
+            # 参考https://stackoverflow.com/questions/6699360/flask-sqlalchemy-update-a-rows-information
+            admin_info = Admin.query.filter_by(username=user).update(dict(password=data['new_pwd']))
+            db.session.commit()
+            return redirect(url_for('admin.admin_info'))
+    return render_template('admin/change-pwd.html', form=form)
 
 
-# 账户信息
-@admin.route('/userInfo')
-def user_info():
-    return render_template('admin/account-info.html')
+# 账户信用卡信息
+@admin.route('/userInfo/<int:page>/')
+def user_info(page=None):
+    if page is None:
+        page = 1
+    credit_list = Credit.query.paginate(page=page, per_page=2)
+    return render_template('admin/account-info.html', credit_data=credit_list)
 
 
 # 冻结账户
-@admin.route('/freezeUser')
-def freeze_user():
-    return render_template('admin/account-info.html')
+@admin.route('/freezeUser/<int:id>/')
+def freeze_user(id=None):
+    user_c = Credit.query.filter_by(id=id).update(dict(cdt_status=0))
+    db.session.commit()
+    return redirect(url_for('admin.user_info', page=1))
+
+
+# 恢复账户
+@admin.route('/recover/<int:id>')
+def recover_user(id=None):
+    user_c = Credit.query.filter_by(id=id).update(dict(cdt_status=1))
+    db.session.commit()
+    return redirect(url_for('admin.user_info', page=1))
 
 
 # 申请列表
-@admin.route('/applyList')
-def apply_list():
+@admin.route('/applyList/<int:page>/')
+def apply_list(page=None):
+    if page is None:
+        page = 1
     return render_template('admin/apply-list.html')
 
 
 # 添加信用卡
-@admin.route('/addCredit')
+@admin.route('/addCredit', methods=['GET', 'POST'])
 def add_credit():
-    return render_template('admin/add-credit.html')
+    form = AddCreditForm()
+    if form.validate_on_submit():
+        data = form.data
+        credit = Credit(creditid=data['creditId'], creditname=data['name'],
+                        limit=data['limit'], idcard=data['idCard'],
+                        phone=data['phone'], email=data['email'],
+                        vaildate=data['vailDate'], overmoney=data['limit'],
+                        cdtstatus=1
+                        )
+        db.session.add(credit)
+        db.session.commit()
+        return redirect(url_for('admin.user_info', page=1))
+    return render_template('admin/add-credit.html', form=form)
 
 
 # 账单信息
@@ -120,15 +166,33 @@ def add_deal():
 
 
 # 欠款信息
-@admin.route('/debtInfo')
-def debt_info():
-    return render_template('admin/debt-info.html')
+@admin.route('/debtInfo/<int:page>/')
+def debt_info(page=None):
+    if page is None:
+        page = 1
+    # 多表查询
+    debt = db.session.query(Debt.credit_id, Credit.creditName, Debt.debt_date, Debt.sum_money, Credit.id,
+                            Credit.cdt_status).filter(
+        Debt.credit_id == Credit.credit_id).order_by(
+        Debt.debt_date.desc()).paginate(page=1, per_page=2)
+    
+    items_list = debt.items
+    print(len(items_list))  # list
+
+    print(type(items_list[0].id))
+    return render_template('admin/debt-info.html', debt=debt)
 
 
 # 添加欠款信息
-@admin.route('/addDebt')
+@admin.route('/addDebt', methods=['GET', 'POST'])
 def add_debt():
-    return render_template('admin/add-debt.html')
+    form = DebtForm()
+    if form.validate_on_submit():
+        data = form.data
+        debtInfo = Debt(credit_id=data['creditId'], debt_date=data['date'], sum_money=data['money'])
+        db.session.add(debtInfo)
+        db.session.commit()
+    return render_template('admin/add-debt.html', form=form)
 
 
 # 消费信息

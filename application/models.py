@@ -19,7 +19,7 @@ class Admin(db.Model):
         return False
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return self.username, self.password
 
 
 # 还款表
@@ -36,7 +36,7 @@ class Debt(db.Model):
         self.sum_money = sum_money
 
     def __repr__(self):
-        return '<Debt %d>' % self.credit_id
+        return '<Debt %s>' % self.credit_id
 
 
 # 消费表
@@ -68,12 +68,13 @@ class Credit(db.Model):
     vailDate = db.Column(db.Date)
     cdt_status = db.Column(db.SmallInteger, nullable=False)  # 0 为冻结 1 为正常
     idCard = db.Column(db.String(24), nullable=False)
+    email = db.Column(db.String(24))
     # 还款表关系
     debts = db.relationship('Debt', backref='credit', lazy='dynamic')
     consumes = db.relationship('Consume', backref='credit', lazy='dynamic')
     deals = db.relationship('Deal', backref='credit', lazy='dynamic')
 
-    def __init__(self, creditid, limit, overmoney, creditname, phone, vaildate, cdtstatus, idcard):
+    def __init__(self, email, creditid, limit, overmoney, creditname, phone, vaildate, cdtstatus, idcard):
         self.credit_id = creditid
         self.limit = limit
         self.overMoney = overmoney
@@ -82,6 +83,7 @@ class Credit(db.Model):
         self.vailDate = vaildate
         self.cdt_status = cdtstatus
         self.idCard = idcard
+        self.email = email
 
     def __repr__(self):
         return '<Credit %s>' % self.creditName

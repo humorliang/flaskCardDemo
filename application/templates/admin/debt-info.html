@@ -1,4 +1,6 @@
 {% extends 'admin/admin-base.html' %}
+{% import 'UI/function.html' as url%}
+{% import 'UI/pagenation.html' as pg %}
 {% block content %}
     <div class="con-rg-title">
         <h3>还款信息</h3>
@@ -15,16 +17,22 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>6288256868852555685</td>
-                <td>郑阿三</td>
-                <td>1000</td>
-                <td>2018-2-12</td>
-                <td>
-                    <a href="{{ url_for('admin.freeze_user') }}" class="btn btn-primary btn-xs">冻结</a>
-                </td>
-            </tr>
+            {% for v in debt.items %}
+                <tr>
+                    <td>{{ v.credit_id }}</td>
+                    <td>{{ v.creditName }}</td>
+                    <td>{{ v.sum_money }}</td>
+                    <td>{{ v.debt_date }}</td>
+                    <td>
+{#                        <a href="{{ url_for('admin.freeze_user') }}" class="btn btn-primary btn-xs">冻结</a>#}
+                        {{ url.url(v.id) }}
+                    </td>
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
+    </div>
+    <div class="center-block">
+        {#        {{ pg.page(debt,'admin.debt_info') }}#}
     </div>
 {% endblock %}

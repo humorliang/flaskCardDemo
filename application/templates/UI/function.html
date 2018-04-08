@@ -1,0 +1,6 @@
+{% macro url(id) %}
+
+    {% if id %}
+        <a href="{{ url_for('admin.freeze_user',id=id) }}" class="btn btn-primary btn-xs">冻结</a>
+    {% endif %}
+{% endmacro %}

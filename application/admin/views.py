@@ -1,6 +1,6 @@
 from .__init__ import admin
 from flask import render_template, redirect, request, flash, session, url_for
-from .forms import LoginForm, AddNewsForm, EditPwdForm, DebtForm, AddCreditForm
+from .forms import LoginForm, DealForm, ConsumeForm, AddNewsForm, EditPwdForm, DebtForm, AddCreditForm
 from application.models import *
 from functools import wraps
 
@@ -77,7 +77,7 @@ def admin_info():
     # 直接答应session['admin']会报错
     # print(session.get('admin'))
     admin_u = session.get('admin')
-    admin_info = Admin.query.filter_by(username=admin_u).first()
+    admin_info = Admin.query.filter_by(username=admin_u).first_or_404()
     return render_template('admin/admin-info.html', admin_info=admin_info)
 
 
@@ -107,7 +107,8 @@ def change_pwd():
 def user_info(page=None):
     if page is None:
         page = 1
-    credit_list = Credit.query.paginate(page=page, per_page=2)
+    credit_list = db.session.query(Debt, Credit).filter(Debt.credit_id == Credit.credit_id).paginate(page=page,
+                                                                                                     per_page=2)
     return render_template('admin/account-info.html', credit_data=credit_list)
 
 
@@ -154,15 +155,30 @@ def add_credit():
 
 
 # 账单信息
-@admin.route('/dealInfo')
-def deal_info():
-    return render_template('admin/deal-info.html')
+@admin.route('/dealInfo/<int:page>/')
+def deal_info(page=None):
+    if page is None:
+        page = 1
+    deal = db.session.query(Deal, Credit).filter(
+        Deal.credit_id == Credit.credit_id).order_by(
+        Deal.deal_date.desc()).paginate(page=1, per_page=2)
+
+    return render_template('admin/deal-info.html', deals=deal)
 
 
 # 添加账单
-@admin.route('/addDeal')
+@admin.route('/addDeal', methods=['GET', 'POST'])
 def add_deal():
-    return render_template('admin/add-deal.html')
+    form = DealForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            data = form.data
+            deals = Deal(credit_id=data['creditId'], deal_date=data['date'], deal_type='转账', sum_money=data['money'],
+                         description=data['comment'])
+            db.session.add(deals)
+            db.session.commit()
+            return redirect(url_for('admin.deal_info', page=1))
+    return render_template('admin/add-deal.html', form=form)
 
 
 # 欠款信息
@@ -174,12 +190,12 @@ def debt_info(page=None):
     debt = db.session.query(Debt.credit_id, Credit.creditName, Debt.debt_date, Debt.sum_money, Credit.id,
                             Credit.cdt_status).filter(
         Debt.credit_id == Credit.credit_id).order_by(
-        Debt.debt_date.desc()).paginate(page=1, per_page=2)
-    
-    items_list = debt.items
-    print(len(items_list))  # list
+        Debt.debt_date.desc()).paginate(page=page, per_page=2)
 
-    print(type(items_list[0].id))
+    # items_list = debt.items
+    # print(len(items_list))  # list
+    #
+    # print(type(items_list[0].id))
     return render_template('admin/debt-info.html', debt=debt)
 
 
@@ -192,19 +208,34 @@ def add_debt():
         debtInfo = Debt(credit_id=data['creditId'], debt_date=data['date'], sum_money=data['money'])
         db.session.add(debtInfo)
         db.session.commit()
+        return redirect(url_for('admin.debt_info', page=1))
     return render_template('admin/add-debt.html', form=form)
 
 
 # 消费信息
-@admin.route('/consumeInfo')
-def consume_info():
-    return render_template('admin/consume-info.html')
+@admin.route('/consumeInfo/<int:page>/')
+def consume_info(page=None):
+    if page is None:
+        page = 1
+    consume = db.session.query(Consume, Credit).filter(Consume.credit_id == Credit.credit_id).order_by(
+        Consume.consume_date.desc()).paginate(page=page, per_page=3)
+
+    return render_template('admin/consume-info.html', consumeData=consume)
 
 
 # 添加消费信息
-@admin.route('/addConsume')
+@admin.route('/addConsume', methods=['GET', 'POST'])
 def add_consume():
-    return render_template('admin/add-consume.html')
+    form = ConsumeForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            datas = form.data
+            conInfo = Consume(credit_id=datas['creditId'], consume_date=datas['date'], sum_money=datas['money'],
+                              Ctype=datas['selectType'])
+            db.session.add(conInfo)
+            db.session.commit()
+            return redirect(url_for('admin.consume_info', page=1))
+    return render_template('admin/add-consume.html', form=form)
 
 
 # 退出

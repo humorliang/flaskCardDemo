@@ -60,28 +60,43 @@
         <form action="" method="post">
             <div class="form-row row">
                 <div class="col-xs-2 margin-top col-xs-offset-2 text-right" style="padding-left:0px;">信用卡卡号</div>
-                <input class="col-xs-6" type="number" name="CriditID " placeholder="输入卡号" required>
+                {#                <input class="col-xs-6" type="number" name="CriditID " placeholder="输入卡号" required>#}
+                {{ form.creditId }}
             </div>
+            {% for err in form.creditId.errors %}
+                <div class="form-row row text-danger text-center">{{ err }}</div>
+            {% endfor %}
             <div class="form-row row">
                 <div class="col-xs-2 margin-top col-xs-offset-2 text-right">消费金额</div>
-                <input class="col-xs-6" type="number" name="consumemoney" placeholder="还款金额" required>
+                {#                <input class="col-xs-6" type="number" name="consumemoney" placeholder="还款金额" required>#}
+                {{ form.money }}
             </div>
+            {% for err in form.money.errors %}
+                <div class="form-row row text-danger text-center">{{ err }}</div>
+            {% endfor %}
             <div class="form-row row">
                 <div class="col-xs-2 margin-top col-xs-offset-2 text-right">消费时间</div>
-                <input class="col-xs-6" type="date" name="consumemoney" placeholder="消费时间">
+                {#                <input class="col-xs-6" type="date" name="consumemoney" placeholder="消费时间">#}
+                {{ form.date }}
             </div>
+            {% for err in form.date.errors %}
+                <div class="form-row row text-danger text-center">{{ err }}</div>
+            {% endfor %}
             <div class="form-row row">
                 <div class="col-xs-2 margin-top col-xs-offset-2 text-right">消费类型</div>
-                <select class="col-xs-4" name="consumetype">
-                    <option value="shopping">购物</option>
-                    <option value="traffic">交通</option>
-                    <option value="travel">旅游</option>
-                    <option value="other">其他</option>
-                </select>
+                {#                <select class="col-xs-4" name="consumetype">#}
+                {#                    <option value="shopping">购物</option>#}
+                {#                    <option value="traffic">交通</option>#}
+                {#                    <option value="travel">旅游</option>#}
+                {#                    <option value="other">其他</option>#}
+                {#                </select>#}
+                {{ form.selectType }}
             </div>
             <div class="form-row row">
                 <div class="col-xs-2 col-xs-offset-3">
-                    <input type="submit" class="btn btn-primary btn-width-margin" value="提交">
+                    {#                    <input type="submit" class="btn btn-primary btn-width-margin" value="提交">#}
+                    {{ form.hidden_tag() }}
+                    {{ form.submit }}
                 </div>
                 <div class="col-xs-5 col-xs-offset-2">
                     <input type="reset" class="btn btn-primary btn-width-margin" value="重置">

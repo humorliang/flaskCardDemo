@@ -1,5 +1,5 @@
 {% extends 'admin/admin-base.html' %}
-{% import 'UI/function.html' as url%}
+{% import 'UI/function.html' as url %}
 {% import 'UI/pagenation.html' as pg %}
 {% block content %}
     <div class="con-rg-title">
@@ -13,6 +13,7 @@
                 <th>持卡人</th>
                 <th>还款金额</th>
                 <th>还款时间</th>
+                <th>卡号状态</th>
                 <th>操作</th>
             </tr>
             </thead>
@@ -23,9 +24,14 @@
                     <td>{{ v.creditName }}</td>
                     <td>{{ v.sum_money }}</td>
                     <td>{{ v.debt_date }}</td>
+                    <td>{% if v.cdt_status==0 %}
+                        冻结
+                    {% elif v.cdt_status==1 %}
+                        正常
+                    {% endif %}</td>
                     <td>
-{#                        <a href="{{ url_for('admin.freeze_user') }}" class="btn btn-primary btn-xs">冻结</a>#}
-                        {{ url.url(v.id) }}
+                        {#                        <a href="{{ url_for('admin.freeze_user') }}" class="btn btn-primary btn-xs">冻结</a>#}
+                        {{ url.url(v) }}
                     </td>
                 </tr>
             {% endfor %}
@@ -33,6 +39,6 @@
         </table>
     </div>
     <div class="center-block">
-        {#        {{ pg.page(debt,'admin.debt_info') }}#}
+        {{ pg.page(debt,'admin.debt_info') }}
     </div>
 {% endblock %}

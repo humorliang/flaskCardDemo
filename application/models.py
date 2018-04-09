@@ -36,7 +36,7 @@ class Debt(db.Model):
         self.sum_money = sum_money
 
     def __repr__(self):
-        return '<Debt %s>' % self.credit_id
+        return self.sum_money
 
 
 # 消费表
@@ -46,9 +46,11 @@ class Consume(db.Model):
     credit_id = db.Column(db.String(30), db.ForeignKey('credit.credit_id'), nullable=True)
     consume_date = db.Column(db.Date, nullable=False)
     sum_money = db.Column(db.DECIMAL(15, 1), nullable=False)
+    Ctype = db.Column(db.String(20), nullable=False)
 
-    def __init__(self, credit_id, consume_date, sum_money):
+    def __init__(self, credit_id, Ctype, consume_date, sum_money):
         self.credit_id = credit_id
+        self.Ctype = Ctype
         self.consume_date = consume_date
         self.sum_money = sum_money
 

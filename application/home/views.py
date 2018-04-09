@@ -26,7 +26,7 @@ def user_login_decorate(fun):
 
 
 # 登陆视图
-@home.route('/login', methods=['GET', "POST"])
+@home.route('/', methods=['GET', "POST"])
 def login():
     # # 1.用户表
     # user = User(username='老王', password='123456', phone='18894259425')
@@ -89,7 +89,7 @@ def register():
 
 
 # 用户主页
-@home.route('/')
+@home.route('/main')
 @user_login_decorate
 def main():
     return render_template('home/index.html')

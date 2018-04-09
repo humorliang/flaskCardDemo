@@ -78,7 +78,7 @@
                     </div>
                     <ul>
                         <li>
-                            <a href="{{ url_for('admin.deal_info') }}">账单信息</a>
+                            <a href="{{ url_for('admin.deal_info',page=1) }}">账单信息</a>
                         </li>
                         <li>
                             <a href="{{ url_for('admin.add_deal') }}">添加账单</a>
@@ -110,7 +110,7 @@
                 </div>
                 <ul>
                     <li>
-                        <a href="{{ url_for('admin.consume_info') }}">消费信息</a>
+                        <a href="{{ url_for('admin.consume_info',page=1) }}">消费信息</a>
                     </li>
                     <li>
                         <a href="{{ url_for('admin.add_consume') }}">添加消费</a>

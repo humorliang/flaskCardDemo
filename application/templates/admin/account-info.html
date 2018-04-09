@@ -14,7 +14,7 @@
                 <th>卡号</th>
                 <th>持卡人</th>
                 <th>余额</th>
-                <th>欠款</th>
+                <th>额度</th>
                 <th>状态</th>
                 <th>操作</th>
             </tr>
@@ -22,20 +22,20 @@
             <tbody>
             {% for v in credit_data.items %}
                 <tr>
-                    <td>{{ v.credit_id }}</td>
-                    <td>{{ v.creditName }}</td>
-                    <td>{{ v.overMoney }}</td>
-                    <td>2000测试数据</td>
-                    {% if v.cdt_status==0 %}
+                    <td>{{ v.Credit.credit_id }}</td>
+                    <td>{{ v.Credit.creditName }}</td>
+                    <td>{{ v.Credit.overMoney }}</td>
+                    <td>{{ v.Credit.limit }}</td>
+                    {% if v.Credit.cdt_status==0 %}
                         <td>冻结</td>
                         <td>
-                            <a href="{{ url_for('admin.recover_user',id=v.id) }}"
+                            <a href="{{ url_for('admin.recover_user',id=v.Credit.id) }}"
                                class="btn btn-primary btn-xs">恢复</a>
                         </td>
                     {% else %}
                         <td>正常</td>
                         <td>
-                            <a href="{{ url_for('admin.freeze_user',id=v.id) }}"
+                            <a href="{{ url_for('admin.freeze_user',id=v.Credit.id) }}"
                                class="btn btn-primary btn-xs">冻结</a>
                         </td>
                     {% endif %}

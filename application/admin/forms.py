@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, DateField, PasswordField, SubmitField  # 添加字段
+from wtforms import StringField, SelectField, DateField, PasswordField, SubmitField  # 添加字段
 from wtforms.validators import DataRequired, URL, Email, NumberRange, ValidationError, EqualTo, Length  # 导入验证器
 from application.models import Admin, User, Credit
 from flask import session
@@ -20,8 +20,8 @@ def validate_credit(form, field):
 # 数字验证器
 def validate_is_num(form, field):
     data = field.data
-    if re.match(r'([0-9]+$)|([0-9]+\.[0-9]{1,2}$)', data) is None:
-        raise ValidationError('请输入正确的金额小数保留两位')
+    if re.match(r'[0-9]+$', data) is None:
+        raise ValidationError('请输入正确的金额')
 
 
 # 定义登陆表单
@@ -86,11 +86,11 @@ class AddNewsForm(FlaskForm):
     newsDate = DateField(
         label='输入时间',
         validators=[
-            DataRequired('请输入时间')
+            DataRequired('请输入正确时间')
         ],
         render_kw={
             'class': "col-xs-6",
-            'placeholder': "格式%Y-%m-%d'"
+            'placeholder': "格式年-月-日'"
         }
     )
     submit = SubmitField(
@@ -233,7 +233,7 @@ class AddCreditForm(FlaskForm):
     vailDate = DateField(
         label='有效期',
         validators=[
-            DataRequired('请输入日期'),
+            DataRequired('请输入正确的日期'),
         ],
         render_kw={
             'class': 'col-xs-6',
@@ -288,11 +288,113 @@ class DebtForm(FlaskForm):
     )
     date = DateField(
         validators=[
+            DataRequired('请输入正确的日期')
+        ],
+        render_kw={
+            'class': 'col-xs-6',
+            'placeholder': '格式年-月-日'
+        }
+    )
+    submit = SubmitField(
+        label='提交',
+        render_kw={
+            'class': 'btn btn-primary btn-width-margin'
+        }
+    )
+
+
+# 消费表单
+class ConsumeForm(FlaskForm):
+    creditId = StringField(
+        label='卡号',
+        validators=[
+            DataRequired('请输入卡号'),
+            validate_credit
+        ],
+        render_kw={
+            'class': 'col-xs-6',
+            'placeholder': '请输入卡号'
+        }
+    )
+    money = StringField(
+        validators=[
+            DataRequired('请输入金额'),
+            validate_is_num
+        ],
+        render_kw={
+            'class': 'col-xs-6',
+            'placeholder': '请输入金额'
+        }
+    )
+    date = DateField(
+        validators=[
+            DataRequired('请输入正确的日期')
+        ],
+        render_kw={
+            'class': 'col-xs-6',
+            'placeholder': '格式年-月-日'
+        }
+    )
+    selectType = SelectField(
+        label='类型',
+        choices=[
+            ('购物', '购物'),
+            ('交通', '交通'),
+            ('旅游', '旅游'),
+            ('其他', '其他'),
+        ],
+        render_kw={
+            'class': 'col-xs-4'
+        }
+    )
+    submit = SubmitField(
+        label='提交',
+        render_kw={
+            'class': 'btn btn-primary btn-width-margin'
+        }
+    )
+
+
+# 账单表单
+class DealForm(FlaskForm):
+    creditId = StringField(
+        label='卡号',
+        validators=[
+            DataRequired('请输入卡号'),
+            validate_credit
+        ],
+        render_kw={
+            'class': 'col-xs-6',
+            'placeholder': '请输入卡号'
+        }
+    )
+    money = StringField(
+        validators=[
+            DataRequired('请输入金额'),
+            validate_is_num
+        ],
+        render_kw={
+            'class': 'col-xs-6',
+            'placeholder': '请输入金额'
+        }
+    )
+    date = DateField(
+        validators=[
             DataRequired('请输入日期')
         ],
         render_kw={
             'class': 'col-xs-6',
             'placeholder': '格式年-月-日'
+        }
+    )
+    comment = StringField(
+        validators=[
+            DataRequired('请输入日期'),
+            Length(max=15, message='请控制在10字之内')
+        ],
+        render_kw={
+            'class': 'col-xs-6',
+            'placeholder': '备注'
         }
     )
     submit = SubmitField(

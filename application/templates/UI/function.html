@@ -1,6 +1,7 @@
-{% macro url(id) %}
-
-    {% if id %}
-        <a href="{{ url_for('admin.freeze_user',id=id) }}" class="btn btn-primary btn-xs">冻结</a>
+{% macro url(v) %}
+    {% if v.cdt_status==0 %}
+        <a href="{{ url_for('admin.recover_user',id=v.id) }}" class="btn btn-primary btn-xs">恢复</a>
+    {% elif v.cdt_status==1 %}
+        <a href="{{ url_for('admin.freeze_user',id=v.id) }}" class="btn btn-primary btn-xs">冻结</a>
     {% endif %}
 {% endmacro %}

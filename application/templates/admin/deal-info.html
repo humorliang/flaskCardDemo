@@ -1,4 +1,5 @@
 {% extends 'admin/admin-base.html' %}
+{% import 'UI/pagenation.html' as pg %}
 {% block title %}
     账单信息
 {% endblock %}
@@ -20,16 +21,21 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>6288256868852555685</td>
-                <td>张三</td>
-                <td>100</td>
-                <td>转账</td>
-                <td>1000</td>
-                <td>2018-2-12</td>
-                <td>王五支付</td>
-            </tr>
+            {% for v in deals.items %}
+                <tr>
+                    <td>{{ v.Deal.credit_id }}</td>
+                    <td>{{ v.Credit.creditName }}</td>
+                    <td>{{ v.Deal.sum_money }}</td>
+                    <td>{{ v.Deal.deal_type }}</td>
+                    <td>{{ v.Credit.overMoney }}</td>
+                    <td>{{ v.Deal.deal_type }}</td>
+                    <td style="word-wrap:break-word">{{ v.Deal.description }}</td>
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
+    </div>
+    <div class="center-block">
+        {{ pg.page(deals,'admin.deal_info') }}
     </div>
 {% endblock %}

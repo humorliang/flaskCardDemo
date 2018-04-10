@@ -59,23 +59,41 @@
         <form action="" method="post">
             <div class="form-row row">
                 <div class="col-xs-2 margin-top col-xs-offset-2 text-right">用户名</div>
-                <input class="col-xs-6" type="text" name="username" placeholder="用户名">
+                {#                <input class="col-xs-6" type="text" name="username" placeholder="用户名">#}
+                {{ form.name }}
             </div>
+            {% for err in form.name.errors %}
+                <div class="form-row row text-center text-danger">{{ err }}</div>
+            {% endfor %}
             <div class="form-row row">
                 <div class="col-xs-2 margin-top col-xs-offset-2 text-right">旧密码</div>
-                <input class="col-xs-6" type="password" name="password" placeholder="输入密码">
+                {#                <input class="col-xs-6" type="password" name="password" placeholder="输入密码">#}
+                {{ form.old_pwd }}
             </div>
+            {% for err in form.old_pwd.errors %}
+                <div class="form-row row text-center text-danger">{{ err }}</div>
+            {% endfor %}
             <div class="form-row row">
                 <div class="col-xs-2 margin-top col-xs-offset-2 text-right">新密码</div>
-                <input class="col-xs-6" type="password" name="password2" placeholder="新密码">
+                {#                <input class="col-xs-6" type="password" name="password2" placeholder="新密码">#}
+                {{ form.new_pwd }}
             </div>
+            {% for err in form.new_pwd.errors %}
+                <div class="form-row row text-center text-danger">{{ err }}</div>
+            {% endfor %}
             <div class="form-row row">
                 <div class="col-xs-2 margin-top col-xs-offset-2 text-right" style="padding-left:0px;">确认新密码</div>
-                <input class="col-xs-6" type="password" name="password3" placeholder="确认新密码">
+                {#                <input class="col-xs-6" type="password" name="password3" placeholder="确认新密码">#}
+                {{ form.new_pwd2 }}
             </div>
+            {% for err in form.new_pwd2.errors %}
+                <div class="form-row row text-center text-danger">{{ err }}</div>
+            {% endfor %}
             <div class="form-row row">
                 <div class="col-xs-offset-5">
-                    <input type="submit" class="btn btn-primary btn-width-margin" value="提交">
+                    {#                    <input type="submit" class="btn btn-primary btn-width-margin" value="提交">#}
+                    {{ form.hidden_tag() }}
+                    {{ form.submit }}
                 </div>
             </div>
         </form>

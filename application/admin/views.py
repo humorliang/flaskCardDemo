@@ -32,14 +32,9 @@ def index():
     return render_template('admin/login.html', form=form)
 
 
-# 主页
-@admin.route('/main')
-def admin_main():
-    return render_template('admin/main.html')
-
-
 # 银行信息
 @admin.route('/newsList/<int:page>/')
+@admin_login_decorate
 def news_list(page=None):
     if page is None:
         page = 1
@@ -49,6 +44,7 @@ def news_list(page=None):
 
 # 添加银行消息
 @admin.route('/addNews', methods=['GET', 'POST'])
+@admin_login_decorate
 def add_news():
     form = AddNewsForm()
     if request.method == 'POST':
@@ -64,6 +60,7 @@ def add_news():
 
 # 删除银行消息
 @admin.route('/delNews/<int:id>/')
+@admin_login_decorate
 def del_news(id=None):
     news = BankInfo.query.filter_by(id=id).first_or_404()
     db.session.delete(news)
@@ -73,16 +70,21 @@ def del_news(id=None):
 
 # 管理员信息
 @admin.route('/adminInfo')
+@admin_login_decorate
 def admin_info():
     # 直接答应session['admin']会报错
     # print(session.get('admin'))
     admin_u = session.get('admin')
-    admin_info = Admin.query.filter_by(username=admin_u).first_or_404()
+    print(admin_u)
+    admin_info = Admin.query.filter_by(username=admin_u).first()
+    if admin_info is None:
+        return redirect(url_for('admin.index'))
     return render_template('admin/admin-info.html', admin_info=admin_info)
 
 
 # 修改密码
 @admin.route('/changePwd', methods=['GET', 'POST'])
+@admin_login_decorate
 def change_pwd():
     form = EditPwdForm()
     data = form.data
@@ -104,16 +106,17 @@ def change_pwd():
 
 # 账户信用卡信息
 @admin.route('/userInfo/<int:page>/')
+@admin_login_decorate
 def user_info(page=None):
     if page is None:
         page = 1
-    credit_list = db.session.query(Debt, Credit).filter(Debt.credit_id == Credit.credit_id).paginate(page=page,
-                                                                                                     per_page=2)
+    credit_list = db.session.query(Credit).paginate(page=page, per_page=2)
     return render_template('admin/account-info.html', credit_data=credit_list)
 
 
 # 冻结账户
 @admin.route('/freezeUser/<int:id>/')
+@admin_login_decorate
 def freeze_user(id=None):
     user_c = Credit.query.filter_by(id=id).update(dict(cdt_status=0))
     db.session.commit()
@@ -122,6 +125,7 @@ def freeze_user(id=None):
 
 # 恢复账户
 @admin.route('/recover/<int:id>')
+@admin_login_decorate
 def recover_user(id=None):
     user_c = Credit.query.filter_by(id=id).update(dict(cdt_status=1))
     db.session.commit()
@@ -130,14 +134,17 @@ def recover_user(id=None):
 
 # 申请列表
 @admin.route('/applyList/<int:page>/')
+@admin_login_decorate
 def apply_list(page=None):
     if page is None:
         page = 1
-    return render_template('admin/apply-list.html')
+    list = ApplyCard.query.paginate(page=page, per_page=2)
+    return render_template('admin/apply-list.html',list=list)
 
 
 # 添加信用卡
 @admin.route('/addCredit', methods=['GET', 'POST'])
+@admin_login_decorate
 def add_credit():
     form = AddCreditForm()
     if form.validate_on_submit():
@@ -156,18 +163,19 @@ def add_credit():
 
 # 账单信息
 @admin.route('/dealInfo/<int:page>/')
+@admin_login_decorate
 def deal_info(page=None):
     if page is None:
         page = 1
     deal = db.session.query(Deal, Credit).filter(
         Deal.credit_id == Credit.credit_id).order_by(
-        Deal.deal_date.desc()).paginate(page=1, per_page=2)
-
+        Deal.deal_date.desc()).paginate(page=page, per_page=2)
     return render_template('admin/deal-info.html', deals=deal)
 
 
 # 添加账单
 @admin.route('/addDeal', methods=['GET', 'POST'])
+@admin_login_decorate
 def add_deal():
     form = DealForm()
     if request.method == 'POST':
@@ -177,12 +185,21 @@ def add_deal():
                          description=data['comment'])
             db.session.add(deals)
             db.session.commit()
+            # 更新余额
+            try:
+                credit = Credit.query.filter_by(credit_id=data['creditId']).first_or_404()
+                nowOvermoney = int(credit.overMoney) - int(data['money'])
+                updata = Credit.query.filter_by(credit_id=data['creditId']).update(dict(overMoney=nowOvermoney))
+                db.session.commit()
+            except Exception as e:
+                db.session.remove()
             return redirect(url_for('admin.deal_info', page=1))
     return render_template('admin/add-deal.html', form=form)
 
 
 # 欠款信息
 @admin.route('/debtInfo/<int:page>/')
+@admin_login_decorate
 def debt_info(page=None):
     if page is None:
         page = 1
@@ -201,6 +218,7 @@ def debt_info(page=None):
 
 # 添加欠款信息
 @admin.route('/addDebt', methods=['GET', 'POST'])
+@admin_login_decorate
 def add_debt():
     form = DebtForm()
     if form.validate_on_submit():
@@ -208,12 +226,14 @@ def add_debt():
         debtInfo = Debt(credit_id=data['creditId'], debt_date=data['date'], sum_money=data['money'])
         db.session.add(debtInfo)
         db.session.commit()
+
         return redirect(url_for('admin.debt_info', page=1))
     return render_template('admin/add-debt.html', form=form)
 
 
 # 消费信息
 @admin.route('/consumeInfo/<int:page>/')
+@admin_login_decorate
 def consume_info(page=None):
     if page is None:
         page = 1
@@ -225,6 +245,7 @@ def consume_info(page=None):
 
 # 添加消费信息
 @admin.route('/addConsume', methods=['GET', 'POST'])
+@admin_login_decorate
 def add_consume():
     form = ConsumeForm()
     if request.method == 'POST':
@@ -234,12 +255,21 @@ def add_consume():
                               Ctype=datas['selectType'])
             db.session.add(conInfo)
             db.session.commit()
+
+            try:
+                credit = Credit.query.filter_by(credit_id=datas['creditId']).first_or_404()
+                nowOvermoney = int(credit.overMoney) - int(datas['money'])
+                updata = Credit.query.filter_by(credit_id=datas['creditId']).update(dict(overMoney=nowOvermoney))
+                db.session.commit()
+            except Exception as e:
+                db.session.remove()
             return redirect(url_for('admin.consume_info', page=1))
     return render_template('admin/add-consume.html', form=form)
 
 
 # 退出
 @admin.route('/loginOut')
+@admin_login_decorate
 def login_out():
     session.pop('admin', None)
     return redirect(url_for('admin.index'))

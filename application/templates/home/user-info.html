@@ -16,39 +16,50 @@
     <div class="con-rg-title">
         <h3>个人简介</h3>
     </div>
-    <table>
-        <tr class="row">
-            <td class="col-xs-2 text-right">姓名：</td>
-            <td class="col-xs-3">张三</td>
-        </tr>
-        <tr class="row">
-            <td class="col-xs-2 text-right">性别：</tdcl>
-            <td class="col-xs-3">男</td>
-        </tr>
-        <tr class="row">
-            <td class="col-xs-2 text-right">年龄：</td>
-            <td class="col-xs-3">28</td>
-        </tr>
-        <tr class="row">
-            <td class="col-xs-2 text-right">邮箱：</td>
-            <td class="col-xs-3">12345678@163.com</td>
-        </tr>
-        <tr class="row">
-            <td class="col-xs-2 text-right">职业：</td>
-            <td class="col-xs-3">程序员</td>
-        </tr>
-        <tr class="row">
-            <td class="col-xs-2 text-right">身份证号码：</td>
-            <td class="col-xs-3">342412188405197403</td>
-        </tr>
-        <tr class="row">
-            <td class="col-xs-2 text-right">联系方式：</td>
-            <td class="col-xs-3">13688886666</td>
-        </tr>
-        <tr class="row">
-            <td class="col-xs-2 text-right">地址：</td>
-            <td class="col-xs-3">上海市浦东新区</td>
-        </tr>
-    </table>
+    {% if user==0 %}
+        <h2 class="text-center text-primary">没有个人简介去
+            <a href="{{ url_for('home.add_user_info') }}" class="btn-primary btn text-default">添加</a>吧</h2>
+    {% else %}
+        <table>
+            <tr class="row">
+                <td class="col-xs-2 text-right">姓名：</td>
+                <td class="col-xs-3">{{ user.Info.name }}</td>
+            </tr>
+            <tr class="row">
+                <td class="col-xs-2 text-right">性别：</td>
+                <td class="col-xs-3">
+                    {% if user.Info.sex==0 %}
+                        女
+                    {% else %}
+                        男
+                    {% endif %}
+                </td>
+            </tr>
+            <tr class="row">
+                <td class="col-xs-2 text-right">年龄：</td>
+                <td class="col-xs-3">{{ user.Info.age }}</td>
+            </tr>
+            <tr class="row">
+                <td class="col-xs-2 text-right">邮箱：</td>
+                <td class="col-xs-3">{{ user.Info.email }}</td>
+            </tr>
+            <tr class="row">
+                <td class="col-xs-2 text-right">职业：</td>
+                <td class="col-xs-3">{{ user.Info.job }}</td>
+            </tr>
+            <tr class="row">
+                <td class="col-xs-2 text-right">身份证号码：</td>
+                <td class="col-xs-3"> {{ user.Info.idCard }} </td>
+            </tr>
+            <tr class="row">
+                <td class="col-xs-2 text-right">联系方式：</td>
+                <td class="col-xs-3">{{ user.Info.phone }}</td>
+            </tr>
+            <tr class="row">
+                <td class="col-xs-2 text-right">地址：</td>
+                <td class="col-xs-3">{{ user.Info.address }}</td>
+            </tr>
+        </table>
+    {% endif %}
 {% endblock %}
 

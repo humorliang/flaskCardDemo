@@ -14,19 +14,19 @@
                 <th>申请额度</th>
                 <th>身份证号</th>
                 <th>手机号</th>
-                <th>邮箱</th>
-                <th>地址</th>
+                <th>操作</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>张三</td>
-                <td>10000</td>
-                <td>3425198705162580</td>
-                <td>18666668888</td>
-                <td>123568@163.com</td>
-                <td>上海市浦东新区张江软件园</td>
-            </tr>
+            {% for v in list.items %}
+                <tr>
+                    <td>{{ v.name }}</td>
+                    <td>{{ v.limit }}</td>
+                    <td>{{ v.idcard }}</td>
+                    <td>{{ v.phone }}</td>
+                    <td><a href="{{ url_for('admin.add_credit') }}" class="btn btn-primary btn-xs">添加</a></td>
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
     </div>

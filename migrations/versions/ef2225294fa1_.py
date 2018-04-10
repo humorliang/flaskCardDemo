@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 109f78406230
+Revision ID: ef2225294fa1
 Revises: 
-Create Date: 2018-04-07 16:45:15.592177
+Create Date: 2018-04-10 22:07:21.333252
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '109f78406230'
+revision = 'ef2225294fa1'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -39,6 +39,15 @@ def upgrade():
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('phone')
     )
+    op.create_table('applycard',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('name', sa.String(length=100), nullable=False),
+    sa.Column('limit', sa.String(length=100), nullable=False),
+    sa.Column('idcard', sa.String(length=24), nullable=False),
+    sa.Column('phone', sa.String(length=110), nullable=True),
+    sa.ForeignKeyConstraint(['phone'], ['user.phone'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
     op.create_table('credit',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('credit_id', sa.String(length=30), nullable=False),
@@ -49,6 +58,7 @@ def upgrade():
     sa.Column('vailDate', sa.Date(), nullable=True),
     sa.Column('cdt_status', sa.SmallInteger(), nullable=False),
     sa.Column('idCard', sa.String(length=24), nullable=False),
+    sa.Column('email', sa.String(length=24), nullable=True),
     sa.ForeignKeyConstraint(['phone'], ['user.phone'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('credit_id')
@@ -62,7 +72,9 @@ def upgrade():
     sa.Column('email', sa.String(length=20), nullable=False),
     sa.Column('job', sa.String(length=10), nullable=False),
     sa.Column('idCard', sa.String(length=24), nullable=False),
-    sa.ForeignKeyConstraint(['phone'], ['user.phone'], ),
+    sa.Column('address', sa.String(length=30), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('idCard')
     )
@@ -71,6 +83,7 @@ def upgrade():
     sa.Column('credit_id', sa.String(length=30), nullable=True),
     sa.Column('consume_date', sa.Date(), nullable=False),
     sa.Column('sum_money', sa.DECIMAL(precision=15, scale=1), nullable=False),
+    sa.Column('Ctype', sa.String(length=20), nullable=False),
     sa.ForeignKeyConstraint(['credit_id'], ['credit.credit_id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -102,6 +115,7 @@ def downgrade():
     op.drop_table('consume')
     op.drop_table('info')
     op.drop_table('credit')
+    op.drop_table('applycard')
     op.drop_table('user')
     op.drop_table('bank_info')
     op.drop_table('admin')

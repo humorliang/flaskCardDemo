@@ -24,6 +24,7 @@ def validate_is_num(form, field):
         raise ValidationError('请输入正确的金额')
 
 
+
 # 定义登陆表单
 class LoginForm(FlaskForm):
     username = StringField(
@@ -261,6 +262,13 @@ class AddCreditForm(FlaskForm):
         idCard = field.data
         if re.match(r'^([1-9]\d{5}[12]\d{3}(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01])\d{3}[0-9xX])$', idCard) is None:
             raise ValidationError('请输入正确的身份证号')
+
+    # 验证信用卡号是否存在
+    def validate_creditId(self, field):
+        data = field.data
+        num = Credit.query.filter_by(credit_id=data).count()
+        if num != 0:
+            raise ValidationError('卡号已经存在')
 
 
 # 欠款表单

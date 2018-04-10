@@ -1,4 +1,5 @@
 {% extends 'home/user-base.html' %}
+{% import 'UI/pagenation.html' as pg %}
 {% block title %}
     还款信息
 {% endblock %}
@@ -6,22 +7,32 @@
     <div class="con-rg-title">
         <h3>还款信息</h3>
     </div>
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>卡号</th>
-                <th>还款金额</th>
-                <th>还款时间</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>6288256868852555685</td>
-                <td>1000</td>
-                <td>2018-2-12</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+    {% if debts %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>卡号</th>
+                    <th>还款金额</th>
+                    <th>还款时间</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for v in debts.items %}
+                    <tr>
+                        <td>{{ v.Debt.credit_id }}</td>
+                        <td>{{ v.Debt.sum_money }}</td>
+                        <td>{{ v.Debt.debt_date }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="center-block">
+            {{ pg.page(debts,'home.debt_info') }}
+        </div>
+    {% else %}
+        <div class="text-center text-primary" style="font-size: 20px;padding-top: 40px">你还没有信用卡</div>
+    {% endif %}
 {% endblock %}

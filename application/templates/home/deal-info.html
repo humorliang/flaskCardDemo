@@ -1,33 +1,46 @@
 {% extends 'home/user-base.html' %}
+{% import 'UI/pagenation.html' as pg %}
 {% block title %}
-    账单信息
+    转账信息
 {% endblock %}
 {% block content %}
     <div class="con-rg-title">
-        <h3>交易明细</h3>
+        <h3>转账明细</h3>
     </div>
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>卡号</th>
-                <th>金额</th>
-                <th>类型</th>
-                <th>余额</th>
-                <th>时间</th>
-                <th>备注</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>6288256868852555685</td>
-                <td>100</td>
-                <td>转账</td>
-                <td>1000</td>
-                <td>2018-2-12</td>
-                <td>王五支付</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+    {% if deals %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>卡号</th>
+                    <th>持卡人</th>
+                    <th>金额</th>
+                    <th>类型</th>
+                    <th>余额</th>
+                    <th>时间</th>
+                    <th>备注</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for v in deals.items %}
+                    <tr>
+                        <td>{{ v.Credit.credit_id }}</td>
+                        <td>{{ v.Credit.creditName }}</td>
+                        <td>{{ v.Deal.sum_money }}</td>
+                        <td>{{ v.Deal.deal_type }}</td>
+                        <td>{{ v.Credit.overMoney }}</td>
+                        <td>{{ v.Deal.deal_date }}</td>
+                        <td>{{ v.Deal.description }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="center-block">
+            {{ pg.page(deals,'home.deal_info') }}
+        </div>
+    {% else %}
+        <div class="text-center text-primary" style="font-size: 20px;padding-top: 40px">你还没有信用卡</div>
+    {% endif %}
 {% endblock %}

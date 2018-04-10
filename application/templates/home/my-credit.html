@@ -6,26 +6,43 @@
     <div class="con-rg-title">
         <h3>信用卡信息</h3>
     </div>
-    <div class="table-responsive">
+    {% if credit %}
+        <div class="table-responsive">
         <table class="table table-striped">
             <thead>
             <tr>
                 <th>卡号</th>
-                <th>有效期</th>
                 <th>持卡人</th>
+                <th>有效期</th>
                 <th>余额</th>
+                <th>额度</th>
                 <th>状态</th>
+                <th>操作</th>
             </tr>
             </thead>
+
             <tbody>
             <tr>
-                <td>6288256868852555685</td>
-                <td>2018-2-25</td>
-                <td>张三</td>
-                <td>100000</td>
-                <td>正常</td>
+                <td>{{ credit.credit_id }}</td>
+                <td>{{ credit.creditName }}</td>
+                <td>{{ credit.vailDate }}</td>
+                <td>{{ credit.overMoney }}</td>
+                <td>{{ credit.limit }}</td>
+                {% if credit.cdt_status==0 %}
+                    <td>冻结</td>
+                    <td>无</td>
+                {% else %}
+                    <td>正常</td>
+                    <td><a href="{{ url_for('home.freeze_user',id=credit.id) }}" class="btn btn-primary btn-xs">挂失</a></td>
+                {% endif %}
             </tr>
             </tbody>
+
         </table>
-    </div>
+    {% else %}
+        <div class="text-center text-primary" style="font-size: 22px;padding-top: 40px">
+            您目前还没有信用卡
+        </div>
+    {% endif %}
+</div>
 {% endblock %}

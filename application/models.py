@@ -88,7 +88,8 @@ class Credit(db.Model):
         self.email = email
 
     def __repr__(self):
-        return '<Credit %s>' % self.creditName
+        return self.creditName, self.overMoney, \
+               self.credit_id, self.limit, self.vailDate, self.cdt_status
 
 
 # 交易表
@@ -129,7 +130,7 @@ class User(db.Model):
         self.phone = phone
 
     def __repr__(self):
-        return '<User %s>' % self.username
+        return self.username, self.id, self.phone
 
     def check_pwd(self, pwd):
         if pwd == self.password:
@@ -143,15 +144,19 @@ class Info(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
     name = db.Column(db.String(100), nullable=False)
     age = db.Column(db.Integer, nullable=False)
-    phone = db.Column(db.String(110), db.ForeignKey('user.phone'), nullable=True)  # 手机号唯一
+    phone = db.Column(db.String(110), nullable=True)  # 手机号唯一
     sex = db.Column(db.SmallInteger, nullable=False)  # 1 为男 0 为女
     email = db.Column(db.String(20), nullable=False)
     job = db.Column(db.String(10), nullable=False)
     idCard = db.Column(db.String(24), nullable=False, unique=True)
+    address = db.Column(db.String(30), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    def __init__(self, name, age, phone, sex, email, job, idcard):
+    def __init__(self, name, age, user_id, phone, sex, email, address, job, idcard):
         self.name = name
+        self.user_id = user_id
         self.age = age
+        self.address = address
         self.phone = phone
         self.sex = sex
         self.email = email
@@ -182,17 +187,13 @@ class ApplyCard(db.Model):
     name = db.Column(db.String(100), nullable=False)
     limit = db.Column(db.String(100), nullable=False)
     idcard = db.Column(db.String(24), nullable=False)
-    phone = db.Column(db.String(110), db.ForeignKey('user.phone'), unique=True)
-    email = db.Column(db.String(24), nullable=False)
-    address = db.Column(db.String(24), nullable=False)
+    phone = db.Column(db.String(110), db.ForeignKey('user.phone'))
 
-    def __init__(self, name, limit, idcard, phone, email, address):
+    def __init__(self, name, limit, idcard, phone):
         self.name = name
         self.limit = limit
         self.idcard = idcard
         self.phone = phone
-        self.email = email
-        self.address = address
 
     def __repr__(self):
         return '<ApplyCard %s>' % self.name

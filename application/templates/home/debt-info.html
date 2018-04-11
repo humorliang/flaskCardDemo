@@ -13,6 +13,7 @@
                 <thead>
                 <tr>
                     <th>卡号</th>
+                    <th>持卡人</th>
                     <th>还款金额</th>
                     <th>还款时间</th>
                 </tr>
@@ -22,6 +23,7 @@
                 {% for v in debts.items %}
                     <tr>
                         <td>{{ v.Debt.credit_id }}</td>
+                        <td>{{ v.Credit.creditName }}</td>
                         <td>{{ v.Debt.sum_money }}</td>
                         <td>{{ v.Debt.debt_date }}</td>
                     </tr>

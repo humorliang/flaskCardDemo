@@ -109,11 +109,13 @@ def register():
 @user_login_decorate
 def user_info():
     username = session.get('user')
-    user = db.session.query(Info, User).filter(Info.user_id == User.id).count()
+    user_ = User.query.filter_by(username=username).first()
+    print(user_.id)
+    user = db.session.query(Info, User).filter(Info.user_id == user_.id).count()
     if user == 0:
         return render_template('home/user-info.html', user=user)
     else:
-        info = db.session.query(Info, User).filter(Info.user_id == User.id).first_or_404()
+        info = db.session.query(Info, User).filter(Info.user_id == user_.id).first()
         return render_template('home/user-info.html', user=info)
 
 
@@ -124,8 +126,8 @@ def add_user_info():
     form = AddInfoForm()
     if form.validate_on_submit():
         data = form.data
-        user = session.get('user')
-        user_id = User.query.filter_by(username=user).first_or_404()
+        username = session.get('user')
+        user_id = User.query.filter_by(username=username).first()
         infos = Info(name=data['name'], sex=int(data['sex']), age=data['age'],
                      phone=data['phone'], email=data['email'],
                      job=data['job'], idcard=data['IDCard'],
@@ -194,8 +196,10 @@ def deal_info(page=None):
         user = session.get('user')
         user_ = User.query.filter_by(username=user).first()
         credit = Credit.query.filter_by(phone=user_.phone).first()
+        print(credit.credit_id)
         deals = db.session.query(Deal, Credit).filter(
             Deal.credit_id == credit.credit_id,
+            Credit.credit_id==credit.credit_id
         ).paginate(page=page, per_page=3)
         return render_template('home/deal-info.html', deals=deals)
     except Exception as e:
@@ -215,6 +219,7 @@ def debt_info(page=None):
         credit = Credit.query.filter_by(phone=user_.phone).first()
         debts = db.session.query(Debt, Credit).filter(
             Debt.credit_id == credit.credit_id,
+            Credit.credit_id == credit.credit_id
         ).paginate(page=page, per_page=3)
         return render_template('home/debt-info.html', debts=debts)
     except Exception as e:
@@ -234,6 +239,7 @@ def consume_info(page=None):
         credit = Credit.query.filter_by(phone=user_.phone).first()
         consumes = db.session.query(Consume, Credit).filter(
             Consume.credit_id == credit.credit_id,
+            Credit.credit_id == credit.credit_id
         ).paginate(page=page, per_page=3)
         return render_template('home/consume-info.html', consumes=consumes)
     except Exception as e:

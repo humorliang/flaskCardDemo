@@ -110,7 +110,7 @@ def change_pwd():
 def user_info(page=None):
     if page is None:
         page = 1
-    credit_list = db.session.query(Credit).paginate(page=page, per_page=2)
+    credit_list = db.session.query(Credit).paginate(page=page, per_page=6)
     return render_template('admin/account-info.html', credit_data=credit_list)
 
 
@@ -138,7 +138,7 @@ def recover_user(id=None):
 def apply_list(page=None):
     if page is None:
         page = 1
-    list = ApplyCard.query.paginate(page=page, per_page=2)
+    list = ApplyCard.query.paginate(page=page, per_page=6)
     return render_template('admin/apply-list.html',list=list)
 
 
@@ -169,7 +169,7 @@ def deal_info(page=None):
         page = 1
     deal = db.session.query(Deal, Credit).filter(
         Deal.credit_id == Credit.credit_id).order_by(
-        Deal.deal_date.desc()).paginate(page=page, per_page=2)
+        Deal.deal_date.desc()).paginate(page=page, per_page=6)
     return render_template('admin/deal-info.html', deals=deal)
 
 
@@ -207,7 +207,7 @@ def debt_info(page=None):
     debt = db.session.query(Debt.credit_id, Credit.creditName, Debt.debt_date, Debt.sum_money, Credit.id,
                             Credit.cdt_status).filter(
         Debt.credit_id == Credit.credit_id).order_by(
-        Debt.debt_date.desc()).paginate(page=page, per_page=2)
+        Debt.debt_date.desc()).paginate(page=page, per_page=6)
 
     # items_list = debt.items
     # print(len(items_list))  # list
@@ -238,7 +238,7 @@ def consume_info(page=None):
     if page is None:
         page = 1
     consume = db.session.query(Consume, Credit).filter(Consume.credit_id == Credit.credit_id).order_by(
-        Consume.consume_date.desc()).paginate(page=page, per_page=3)
+        Consume.consume_date.desc()).paginate(page=page, per_page=6)
 
     return render_template('admin/consume-info.html', consumeData=consume)
 

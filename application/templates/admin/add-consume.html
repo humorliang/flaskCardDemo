@@ -92,6 +92,7 @@
                 {#                </select>#}
                 {{ form.selectType }}
             </div>
+
             <div class="form-row row">
                 <div class="col-xs-2 col-xs-offset-3">
                     {#                    <input type="submit" class="btn btn-primary btn-width-margin" value="提交">#}
@@ -104,4 +105,16 @@
             </div>
         </form>
     </div>
+{% endblock %}
+{% block footer %}
+
+    <script type="text/javascript">
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#date', //指定元素
+            type: 'date'
+        });
+
+    </script>
 {% endblock %}

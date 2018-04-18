@@ -3,6 +3,7 @@ from flask import render_template, redirect, request, flash, session, url_for
 from .forms import LoginForm, DealForm, ConsumeForm, AddNewsForm, EditPwdForm, DebtForm, AddCreditForm
 from application.models import *
 from functools import wraps
+import re
 
 
 # 定义管理员登陆装饰器
@@ -14,6 +15,14 @@ def admin_login_decorate(fun):
         return fun(*args, **kwargs)
 
     return check_session
+
+
+# 检查是否是数字
+def is_num(data):
+    if re.match(r'^[0-9]+$', data) is None:
+        return False
+    else:
+        return True
 
 
 # 登陆
@@ -114,6 +123,21 @@ def user_info(page=None):
     return render_template('admin/account-info.html', credit_data=credit_list)
 
 
+# 账户查找
+@admin.route('/searchInfo', methods=['GET', 'POST'])
+@admin_login_decorate
+def search_info():
+    if request.method == 'POST':
+        # return request.form.get('search-info') #获取表单数据
+        data = request.form.get('search-info')
+        if is_num(data):
+            c_info = Credit.query.filter_by(credit_id=data).all()
+            return render_template('admin/search-info.html', data=c_info)
+        else:
+            c_info = Credit.query.filter_by(creditName=data).all()
+            return render_template('admin/search-info.html', data=c_info)
+
+
 # 冻结账户
 @admin.route('/freezeUser/<int:id>/')
 @admin_login_decorate
@@ -139,7 +163,7 @@ def apply_list(page=None):
     if page is None:
         page = 1
     list = ApplyCard.query.paginate(page=page, per_page=6)
-    return render_template('admin/apply-list.html',list=list)
+    return render_template('admin/apply-list.html', list=list)
 
 
 # 添加信用卡
@@ -187,12 +211,12 @@ def add_deal():
             db.session.commit()
             # 更新余额
             try:
-                credit = Credit.query.filter_by(credit_id=data['creditId']).first_or_404()
+                credit = Credit.query.filter_by(credit_id=data['creditId']).first()
                 nowOvermoney = int(credit.overMoney) - int(data['money'])
                 updata = Credit.query.filter_by(credit_id=data['creditId']).update(dict(overMoney=nowOvermoney))
                 db.session.commit()
             except Exception as e:
-                db.session.remove()
+                print(e)
             return redirect(url_for('admin.deal_info', page=1))
     return render_template('admin/add-deal.html', form=form)
 
@@ -262,7 +286,7 @@ def add_consume():
                 updata = Credit.query.filter_by(credit_id=datas['creditId']).update(dict(overMoney=nowOvermoney))
                 db.session.commit()
             except Exception as e:
-                db.session.remove()
+                print(e)
             return redirect(url_for('admin.consume_info', page=1))
     return render_template('admin/add-consume.html', form=form)
 

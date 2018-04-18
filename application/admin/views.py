@@ -197,6 +197,22 @@ def deal_info(page=None):
     return render_template('admin/deal-info.html', deals=deal)
 
 
+# 账单查找
+@admin.route('/searchDeal/<int:page>/', methods=['GET', 'POST'])
+@admin_login_decorate
+def search_deal(page=None):
+    if page is None:
+        page = 1
+    if request.method == 'POST':
+        data = request.form.get('search-info')
+        deal = db.session.query(Deal, Credit).filter(
+            Deal.credit_id == Credit.credit_id, Deal.credit_id == data).order_by(
+            Deal.deal_date.desc()).paginate(page=page, per_page=600)
+        return render_template('admin/se-deal-info.html', deals=deal)
+    else:
+        return redirect(url_for('admin.deal_info', page=1))
+
+
 # 添加账单
 @admin.route('/addDeal', methods=['GET', 'POST'])
 @admin_login_decorate
@@ -233,11 +249,25 @@ def debt_info(page=None):
         Debt.credit_id == Credit.credit_id).order_by(
         Debt.debt_date.desc()).paginate(page=page, per_page=6)
 
-    # items_list = debt.items
-    # print(len(items_list))  # list
-    #
-    # print(type(items_list[0].id))
     return render_template('admin/debt-info.html', debt=debt)
+
+
+# 欠款查找
+@admin.route('/searchDebt/<int:page>/', methods=['GET', 'POST'])
+@admin_login_decorate
+def search_debt(page=None):
+    if page is None:
+        page = 1
+    if request.method == 'POST':
+        data = request.form.get('search-info')
+        # 多表查询
+        debt = db.session.query(Debt.credit_id, Credit.creditName, Debt.debt_date, Debt.sum_money, Credit.id,
+                                Credit.cdt_status).filter(
+            Debt.credit_id == Credit.credit_id, Debt.credit_id == data).order_by(
+            Debt.debt_date.desc()).paginate(page=page, per_page=600)
+        return render_template('admin/se-debt-info.html', debt=debt)
+    else:
+        return redirect(url_for('admin.debt_info', page=1))
 
 
 # 添加欠款信息
@@ -267,6 +297,22 @@ def consume_info(page=None):
     return render_template('admin/consume-info.html', consumeData=consume)
 
 
+# 消费查找
+@admin.route('/searchConsume/<int:page>/', methods=['GET', 'POST'])
+@admin_login_decorate
+def search_consume(page=None):
+    if page is None:
+        page = 1
+    if request.method == 'POST':
+        data = request.form.get('search-info')
+        consume = db.session.query(Consume, Credit).filter(
+            Consume.credit_id == Credit.credit_id, Consume.credit_id == data).order_by(
+            Consume.consume_date.desc()).paginate(page=page, per_page=600)
+        return render_template('admin/se-consume-info.html', consumeData=consume)
+    else:
+        return redirect(url_for('admin.consume_info', page=1))
+
+
 # 添加消费信息
 @admin.route('/addConsume', methods=['GET', 'POST'])
 @admin_login_decorate
@@ -279,7 +325,6 @@ def add_consume():
                               Ctype=datas['selectType'])
             db.session.add(conInfo)
             db.session.commit()
-
             try:
                 credit = Credit.query.filter_by(credit_id=datas['creditId']).first_or_404()
                 nowOvermoney = int(credit.overMoney) - int(datas['money'])

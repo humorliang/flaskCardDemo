@@ -3,7 +3,18 @@
 {% import 'UI/pagenation.html' as pg %}
 {% block content %}
     <div class="con-rg-title">
-        <h3>还款信息</h3>
+        <h3>还款信息
+
+         <div class="center-block pull-right">
+                <form class="form-inline" method="post" action="{{ url_for('admin.search_debt',page=1) }}">
+                    <div class="form-group">
+                        <label class="sr-only" for="search">快速查找</label>
+                        <input type="text" name="search-info" class="form-control" id="search" placeholder="卡号">
+                    </div>
+                    <button type="submit" class="btn btn-primary">查找</button>
+                </form>
+            </div>
+        </h3>
     </div>
     <div class="table-responsive">
         <table class="table table-striped">

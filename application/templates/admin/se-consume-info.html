@@ -1,0 +1,42 @@
+{% extends 'admin/admin-base.html' %}
+{% import 'UI/pagenation.html' as pg %}
+{% block title %}
+    消费信息
+{% endblock %}
+{% block content %}
+    <div class="con-rg-title">
+        <h3>查询结果</h3>
+    </div>
+    {% if consumeData %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>卡号</th>
+                    <th>持卡人</th>
+                    <th>交易金额</th>
+                    <th>余额</th>
+                    <th>消费时间</th>
+                    <th>消费类型</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for v in consumeData.items %}
+                    <tr>
+                        {#                    使用paginate返回的模型对象进行访问#}
+                        <td>{{ v.Consume.credit_id }}</td>
+                        <td>{{ v.Credit.creditName }}</td>
+                        <td>-{{ v.Consume.sum_money }}</td>
+                        <td>{{ v.Credit.overMoney }}</td>
+                        <td>{{ v.Consume.consume_date }}</td>
+                        <td>{{ v.Consume.Ctype }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    {% else %}
+        <div class="center-block text-center text-primary" style="font-size: 20px;">没有查询到相关信息</div>
+    {% endif %}
+{% endblock %}

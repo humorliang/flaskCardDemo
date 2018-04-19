@@ -7,6 +7,9 @@ li {
     height: 30px;
     line-height: 30px;
 }
+.info-bar{
+    color: #f4f4f4;
+}
 
 a:focus,
 a:hover {
@@ -23,7 +26,6 @@ a:hover {
 /* 内容左边样式 */
 .content-left {
     padding-top: 30px;
-    background: #f5f5f5;
     border-right: 1px solid #ccc;
     max-width: 260px;
 }
@@ -35,10 +37,10 @@ a:hover {
 
 .menu {
     font-size: 17px;
-    padding: 10px 20px;
     border-bottom: 1px solid #ccc;
     cursor: pointer;
 }
+
 .menu-title span{
     display: block;
     float: right;

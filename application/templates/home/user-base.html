@@ -8,6 +8,65 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/home.css') }}">
     <title>{% block title %}{% endblock %}</title>
+    <style>
+        body {
+            background-image: url({{ url_for('static',filename='images/main-bg.png') }});
+            background-size: 100%;
+        }
+
+        .content > nav {
+            background-image: url({{ url_for('static',filename='images/header-bg_02.png') }});
+            background-size: 107px 100%;
+            background-repeat: repeat;
+        }
+
+        .navbar-brand {
+            padding: 0;
+        }
+
+        .navbar-brand img {
+            width: 100%;
+        }
+
+        .main .row .content-left {
+        {#background-image: url({{ url_for('static',filename='images/main-bg_02.png') }});#}{#background-size: 100% 100%;#} background: #0470bf;
+            color: #afd9ee;
+        }
+
+        .main .row .content-left a {
+            color: #ffffff;
+        }
+
+        .menu {
+            padding: 10px 0;
+        }
+
+        .content-left .menu > .menu-title {
+            display: block;
+            width: 100%;
+            height: 50px;
+            line-height: 50px;
+            padding-left: 10px;
+            background-image: url({{ url_for('static',filename='images/header-bg_02.png') }});
+            background-size: 107px 100%;
+            background-repeat: repeat;
+            color: #000;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            cursor: text;
+        }
+
+        .content-right > .table-responsive {
+            background: #f4f4f4;
+            padding: 5px 10px;
+        }
+
+        .content-right .con-rg-title {
+            background-image: url({{ url_for('static',filename='images/header-bg_02.png') }});
+            background-size: 107px 100%;
+            background-repeat: repeat;
+        }
+    </style>
     {% block style %}{% endblock %}
 </head>
 
@@ -16,14 +75,15 @@
     <!-- 头部 -->
     <nav class="navbar navbar-default">
         <div class="container-fluid">
-            <div class="navbar-header col-xs-10">
-                <a class="navbar-brand" href="{{ url_for('home.main',page=1) }}">信用卡管理系统中心</a>
+            <div class="navbar-header col-xs-3">
+                <a class="navbar-brand" href="{{ url_for('home.main',page=1) }}"><img
+                        src="{{ url_for('static',filename='images/logo.png') }}" alt="logo"></a>
             </div>
-            <div class="col-xs-2">
-                <a href="{{ url_for('home.login_out') }}" class="col-xs-offset-6 btn" style="margin-top: 10px;">退出</a>
+            <div class="col-xs-2 col-xs-offset-7">
+                <a href="{{ url_for('home.login_out') }}" class="col-xs-offset-6 btn btn-primary"
+                   style="margin-top: 10px;">退出</a>
             </div>
         </div>
-
     </nav>
     <!-- 内容 -->
     <div class="main">
@@ -31,7 +91,7 @@
             {#左边#}
             <div class="col-xs-3 content-left">
                 <div class="menu info-bar">
-                    <span class="glyphicon glyphicon-home text-primary"></span>
+                    <span class="glyphicon glyphicon-home"></span>
                     <a href="{{ url_for('home.main',page=1) }}">银行最新信息</a>
                 </div>
                 <div class="menu">
@@ -40,42 +100,40 @@
                     </div>
                     <ul>
                         <li>
-                            <a href="{{ url_for('home.user_info') }}">个人简介</a>
+                            <a href="{{ url_for('home.user_info') }}" class="btn btn-primary">个人简介</a>
                         </li>
                         <li>
-                            <a href="{{ url_for('home.add_user_info') }}">编辑简介</a>
+                            <a href="{{ url_for('home.add_user_info') }}" class="btn btn-primary">编辑简介</a>
                         </li>
                         <li>
-                            <a href="{{ url_for('home.edit_pwd') }}">修改密码</a>
+                            <a href="{{ url_for('home.edit_pwd') }}" class="btn btn-primary">修改密码</a>
                         </li>
                     </ul>
                 </div>
                 <div class="menu">
                     <div class="menu-title">
-                        <div>
-                            信用卡管理
-                        </div>
+                        信用卡管理
                     </div>
                     <ul>
                         <li>
-                            <a href="{{ url_for('home.my_credit') }}">我的信用卡</a>
+                            <a href="{{ url_for('home.my_credit') }}" class="btn btn-primary">我的信用卡</a>
                         </li>
                         <li>
-                            <a href="{{ url_for('home.apply_credit') }}">信用卡申请</a>
+                            <a href="{{ url_for('home.apply_credit') }}" class="btn btn-primary">信用卡申请</a>
                         </li>
                     </ul>
                 </div>
                 <div class="menu">
                     <div class="menu-title">
-                        <div>
-                            转账管理
-                        </div>
-                        <ul>
-                            <li>
-                                <a href="{{ url_for('home.deal_info',page=1) }}">转账明细</a>
-                            </li>
-                        </ul>
+
+                        转账管理
+
                     </div>
+                    <ul>
+                        <li>
+                            <a href="{{ url_for('home.deal_info',page=1) }}" class="btn btn-primary"> 转账明细</a>
+                        </li>
+                    </ul>
                 </div>
                 <div class="menu">
                     <div class="menu-title">
@@ -85,7 +143,7 @@
                     </div>
                     <ul>
                         <li>
-                            <a href="{{ url_for('home.debt_info',page=1) }}">还款信息</a>
+                            <a href="{{ url_for('home.debt_info',page=1) }}" class="btn btn-primary">还款信息</a>
                         </li>
 
                     </ul>
@@ -99,7 +157,7 @@
                     </div>
                     <ul>
                         <li>
-                            <a href="{{ url_for('home.consume_info',page=1) }}">消费明细</a>
+                            <a href="{{ url_for('home.consume_info',page=1) }}" class="btn btn-primary">消费明细</a>
                         </li>
 
                     </ul>

@@ -16,19 +16,18 @@
     <div class="con-rg-title">
         <h3>个人简介</h3>
     </div>
-    {% if user==0 %}
-        <h2 class="text-center text-primary">没有个人简介去
-            <a href="{{ url_for('home.add_user_info') }}" class="btn-primary btn text-default">添加</a>吧</h2>
-    {% else %}
+    <h2 class="text-center text-primary">简介不完善去
+        <a href="{{ url_for('home.add_user_info') }}" class="btn-primary btn text-default">编辑</a>吧</h2>
+    <div style="margin-left: 100px">
         <table>
             <tr class="row">
                 <td class="col-xs-2 text-right">姓名：</td>
-                <td class="col-xs-3">{{ user.Info.name }}</td>
+                <td class="col-xs-3">{{ user.name }}</td>
             </tr>
             <tr class="row">
                 <td class="col-xs-2 text-right">性别：</td>
                 <td class="col-xs-3">
-                    {% if user.Info.sex==0 %}
+                    {% if user.sex==0 %}
                         女
                     {% else %}
                         男
@@ -37,29 +36,30 @@
             </tr>
             <tr class="row">
                 <td class="col-xs-2 text-right">年龄：</td>
-                <td class="col-xs-3">{{ user.Info.age }}</td>
+                <td class="col-xs-3">{{ user.age }}</td>
             </tr>
             <tr class="row">
                 <td class="col-xs-2 text-right">邮箱：</td>
-                <td class="col-xs-3">{{ user.Info.email }}</td>
+                <td class="col-xs-3">{{ user.email }}</td>
             </tr>
             <tr class="row">
                 <td class="col-xs-2 text-right">职业：</td>
-                <td class="col-xs-3">{{ user.Info.job }}</td>
+                <td class="col-xs-3">{{ user.job }}</td>
             </tr>
             <tr class="row">
                 <td class="col-xs-2 text-right">身份证号码：</td>
-                <td class="col-xs-3"> {{ user.Info.idCard }} </td>
+                <td class="col-xs-3"> {{ user.idCard }} </td>
             </tr>
             <tr class="row">
                 <td class="col-xs-2 text-right">联系方式：</td>
-                <td class="col-xs-3">{{ user.Info.phone }}</td>
+                <td class="col-xs-3">{{ user.phone }}</td>
             </tr>
             <tr class="row">
                 <td class="col-xs-2 text-right">地址：</td>
-                <td class="col-xs-3">{{ user.Info.address }}</td>
+                <td class="col-xs-3">{{ user.address }}</td>
             </tr>
         </table>
-    {% endif %}
+    </div>
+
 {% endblock %}
 

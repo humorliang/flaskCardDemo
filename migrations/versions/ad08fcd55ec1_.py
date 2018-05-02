@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: b956aad8dfdd
+Revision ID: ad08fcd55ec1
 Revises: 
-Create Date: 2018-04-17 11:08:12.139337
+Create Date: 2018-05-02 12:03:04.717782
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'b956aad8dfdd'
+revision = 'ad08fcd55ec1'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -36,6 +36,13 @@ def upgrade():
     sa.Column('username', sa.String(length=100), nullable=False),
     sa.Column('password', sa.String(length=100), nullable=False),
     sa.Column('phone', sa.String(length=110), nullable=True),
+    sa.Column('name', sa.String(length=100), nullable=False),
+    sa.Column('age', sa.Integer(), nullable=True),
+    sa.Column('sex', sa.SmallInteger(), nullable=True),
+    sa.Column('email', sa.String(length=20), nullable=True),
+    sa.Column('job', sa.String(length=10), nullable=True),
+    sa.Column('idCard', sa.String(length=24), nullable=True),
+    sa.Column('address', sa.String(length=30), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('phone')
     )
@@ -62,21 +69,6 @@ def upgrade():
     sa.ForeignKeyConstraint(['phone'], ['user.phone'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('credit_id')
-    )
-    op.create_table('info',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('name', sa.String(length=100), nullable=False),
-    sa.Column('age', sa.Integer(), nullable=False),
-    sa.Column('phone', sa.String(length=110), nullable=True),
-    sa.Column('sex', sa.SmallInteger(), nullable=False),
-    sa.Column('email', sa.String(length=20), nullable=False),
-    sa.Column('job', sa.String(length=10), nullable=False),
-    sa.Column('idCard', sa.String(length=24), nullable=False),
-    sa.Column('address', sa.String(length=30), nullable=False),
-    sa.Column('user_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
-    sa.PrimaryKeyConstraint('id'),
-    sa.UniqueConstraint('idCard')
     )
     op.create_table('consume',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -113,7 +105,6 @@ def downgrade():
     op.drop_table('debt')
     op.drop_table('deal')
     op.drop_table('consume')
-    op.drop_table('info')
     op.drop_table('credit')
     op.drop_table('applycard')
     op.drop_table('user')

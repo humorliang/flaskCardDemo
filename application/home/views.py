@@ -44,27 +44,6 @@ def user_main():
 # 登陆视图
 @home.route('/login', methods=['GET', "POST"])
 def login():
-    # # 1.用户表
-    # user = User(username='老王', password='123456', phone='18894259425')
-    # db.session.add(user)
-    # db.session.commit()
-    # info = Info(name='张三', age=28, phone='18894259425', sex=1, email='163@123.com', job='python',
-    #             idcard='342422199611185836')
-    # db.session.add(info)
-    # db.session.commit()
-    # # 2信用卡表
-    # credit = Credit(creditid='62280004', limit=1000, overmoney=1000, creditname='张三', phone='18894259425',
-    #                 vaildate='2018-02-03', cdtstatus='1', idcard='3424231888')
-    # db.session.add(credit)
-    # db.session.commit()
-    #
-    # # 还款表
-    # debt = Debt(credit_id='62280004', debt_date='2018-03-02', sum_money=100)
-    # consume = Consume(credit_id='62280004', consume_date='2018-03-03', sum_money=1000)
-    # deal = Deal(credit_id='62280004', sum_money=100, deal_date='2018-3-20', deal_type='购物', description='买个手机')
-    #
-    # db.session.add_all([deal, debt, consume])
-    # db.session.commit()
     form = LoginForm()
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -110,16 +89,10 @@ def register():
 def user_info():
     username = session.get('user')
     user_ = User.query.filter_by(username=username).first()
-    print(user_.id)
-    user = db.session.query(Info, User).filter(Info.user_id == user_.id).count()
-    if user == 0:
-        return render_template('home/user-info.html', user=user)
-    else:
-        info = db.session.query(Info, User).filter(Info.user_id == user_.id).first()
-        return render_template('home/user-info.html', user=info)
+    return render_template('home/user-info.html', user=user_)
 
 
-# 添加简介
+# 编辑简介
 @home.route('/addInfo', methods=['GET', 'POST'])
 @user_login_decorate
 def add_user_info():
@@ -127,12 +100,11 @@ def add_user_info():
     if form.validate_on_submit():
         data = form.data
         username = session.get('user')
-        user_id = User.query.filter_by(username=username).first()
-        infos = Info(name=data['name'], sex=int(data['sex']), age=data['age'],
-                     phone=data['phone'], email=data['email'],
-                     job=data['job'], idcard=data['IDCard'],
-                     address=data['address'], user_id=user_id.id)
-        db.session.add(infos)
+        infos = User.query.filter_by(username=username).update(
+            dict(name=data['name'], sex=int(data['sex']),
+                 age=data['age'], email=data['email'],
+                 job=data['job'], idCard=data['IDCard'],
+                 address=data['address']))
         db.session.commit()
         return redirect(url_for('home.user_info'))
     return render_template('home/add-info.html', form=form)
@@ -199,7 +171,7 @@ def deal_info(page=None):
         print(credit.credit_id)
         deals = db.session.query(Deal, Credit).filter(
             Deal.credit_id == credit.credit_id,
-            Credit.credit_id==credit.credit_id
+            Credit.credit_id == credit.credit_id
         ).paginate(page=page, per_page=3)
         return render_template('home/deal-info.html', deals=deals)
     except Exception as e:

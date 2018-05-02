@@ -120,51 +120,23 @@ class User(db.Model):
     username = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(100), nullable=False)
     phone = db.Column(db.String(110), nullable=True, unique=True)  # 外键必须在主表中唯一或者为主键
-    # 用户表关系
-    info = db.relationship('Info', backref='user', uselist=False)
+    name = db.Column(db.String(100), default='')
+    age = db.Column(db.Integer, default=0)
+    sex = db.Column(db.SmallInteger, default=1)  # 1 为男 0 为女
+    email = db.Column(db.String(20), default='')
+    job = db.Column(db.String(10), default='')
+    idCard = db.Column(db.String(24), default='')
+    address = db.Column(db.String(30), default='')
     applycard = db.relationship('ApplyCard', backref='user')
 
-    def __init__(self, username, password, phone):
-        self.username = username
-        self.password = password
-        self.phone = phone
-
     def __repr__(self):
-        return self.username, self.id, self.phone
+        return self.username, self.id, self.phone, self.name, self.age, \
+               self.sex, self.email, self.job, self.idCard, self.address
 
     def check_pwd(self, pwd):
         if pwd == self.password:
             return True
         return False
-
-
-# 用户信息表
-class Info(db.Model):
-    __tablename__ = 'info'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
-    name = db.Column(db.String(100), nullable=False)
-    age = db.Column(db.Integer, nullable=False)
-    phone = db.Column(db.String(110), nullable=True)  # 手机号唯一
-    sex = db.Column(db.SmallInteger, nullable=False)  # 1 为男 0 为女
-    email = db.Column(db.String(20), nullable=False)
-    job = db.Column(db.String(10), nullable=False)
-    idCard = db.Column(db.String(24), nullable=False, unique=True)
-    address = db.Column(db.String(30), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
-    def __init__(self, name, age, user_id, phone, sex, email, address, job, idcard):
-        self.name = name
-        self.user_id = user_id
-        self.age = age
-        self.address = address
-        self.phone = phone
-        self.sex = sex
-        self.email = email
-        self.job = job
-        self.idCard = idcard
-
-    def __repr__(self):
-        return '<Info %s>' % self.name
 
 
 # 银行信息表

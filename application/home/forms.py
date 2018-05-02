@@ -195,15 +195,6 @@ class AddInfoForm(FlaskForm):
             'placeholder': '身份证'
         }
     )
-    phone = StringField(
-        validators=[
-            DataRequired('请填写手机'),
-            validate_is_phone
-        ],
-        render_kw={
-            'placeholder': '手机号'
-        }
-    )
     address = StringField(
         validators=[
             DataRequired('请填写地址')

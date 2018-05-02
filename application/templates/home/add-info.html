@@ -35,9 +35,9 @@
 {% endblock %}
 {% block content %}
     <div class="con-rg-title">
-        <h3>添加简介</h3>
+        <h3>编辑简介</h3>
     </div>
-    <form class="form-horizontal" method="post">
+    <form class="form-horizontal" method="post" >
         <table>
             <tr class="row">
                 <td class="col-xs-2 text-right">姓名：</td>
@@ -113,19 +113,6 @@
                 </td>
             </tr>
             {% for err in form.IDCard.errors %}
-                <tr class="row">
-                    <td class="col-xs-2"></td>
-                    <td class="col-xs-3 text-danger">{{ err }}</td>
-                </tr>
-            {% endfor %}
-            <tr class="row">
-                <td class="col-xs-2 text-right">联系方式：</td>
-                <td class="col-xs-3">
-                    {#                    <input type="number" name="age" value="" maxlength="11">#}
-                    {{ form.phone }}
-                </td>
-            </tr>
-            {% for err in form.phone.errors %}
                 <tr class="row">
                     <td class="col-xs-2"></td>
                     <td class="col-xs-3 text-danger">{{ err }}</td>
